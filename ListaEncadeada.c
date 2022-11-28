@@ -385,12 +385,15 @@ void lista_print(Lista *lista){
 
 void recordAluno(Lista *lista){
 
-    printf("aluno recorder");
+    /* printf("aluno recorder"); */
     FILE *fp = fopen(".//data//database.txt", "a+");
     if(fp==NULL){
         printf("\nErro ao abrir o arquivo!\n");
     }
 
+    fwrite(&lista->begin,sizeof(node_aluno), 1, fp);
+
+    fclose(fp);
 }
 //fim das fun??es l?gicas
 
