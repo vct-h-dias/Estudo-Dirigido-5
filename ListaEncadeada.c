@@ -207,11 +207,7 @@ int Check_Mat(Lista *lista, int mat){
         return;
 
     }
-    //n h? alunos
-    if(lista -> begin == NULL){
-        printf("\nn? h? alunos.\n");
-        return;
-    }
+    
 
     node_aluno *i;
     for(i = lista -> begin; i != NULL ; i = i -> next){
@@ -389,7 +385,12 @@ void lista_print(Lista *lista){
 
 void recordAluno(Lista *lista){
 
+    printf("aluno recorder");
     FILE *fp = fopen(".//data//database.txt", "a+");
+    if(fp==NULL){
+        printf("\nErro ao abrir o arquivo!\n");
+    }
+
 }
 //fim das fun??es l?gicas
 
@@ -487,8 +488,7 @@ int main()
             scanf("%c", &g);
 
             if(g == 'S' || g == 's'){
-                printf("salvano");
-                /* recordAluno(lista); */
+                recordAluno(lista); 
             }
 
             system("pause");
