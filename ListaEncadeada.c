@@ -3,7 +3,7 @@
 #include <string.h>
 #include <locale.h>
 
-//criação listas
+//cria??o listas
 
 typedef struct _node{//node representando dados do aluno
 
@@ -14,37 +14,37 @@ typedef struct _node{//node representando dados do aluno
     float frequency;
     char class;
     
-    //ponteiro para o próximo nó
+    //ponteiro para o pr?ximo n?
     struct _node *next;
 
 }node_aluno;
 
-typedef struct{//representação da lista
+typedef struct{//representa??o da lista
 
-    node_aluno *begin; //ponteiro para o primeiro nó da lista
-    node_aluno *end;    //ponteiro para o últimp nó da lista
+    node_aluno *begin; //ponteiro para o primeiro n? da lista
+    node_aluno *end;    //ponteiro para o ?ltimp n? da lista
 
 } Lista;
 
 //fim das listas
 
 
-//criação das funções do funcionamento da lista
+//cria??o das fun??es do funcionamento da lista
 
 Lista* onCreate(){//cria lista
 
-    //criando a lista (obs; a lista em si é um ponteiro, pois aponta paras os nós)
+    //criando a lista (obs; a lista em si ? um ponteiro, pois aponta paras os n?s)
     Lista *lista = (Lista*) malloc(sizeof(Lista)); 
 
-    if(lista == NULL){//caso não haja memória
+    if(lista == NULL){//caso n?o haja mem?ria
 
-        printf("\nMeméria insuficiente!\n");
+        printf("\nMem?ria insuficiente!\n");
         exit(1); 
 
     }
 
     lista->begin = NULL;//setando inicio/fim da lista
-    lista->end = NULL;  //(no caso NULL, pois n há elementos)
+    lista->end = NULL;  //(no caso NULL, pois n h? elementos)
 
     return lista; //retornando a lista
 
@@ -52,20 +52,20 @@ Lista* onCreate(){//cria lista
 
 void insert_aluno(Lista *lista, int mat, char nome[], float nota, float frequencia, char turma){
 
-    //lista nó criada
+    //lista n? criada
     if(lista == NULL) return;
 
-    //criando nó (obs; o nó em si é um ponteiro, pois aponta para seus respectivos valores)
+    //criando n? (obs; o n? em si ? um ponteiro, pois aponta para seus respectivos valores)
     node_aluno *node = (node_aluno*) malloc(sizeof(node_aluno));
 
-    if(node == NULL){//caso nó haja meméria
+    if(node == NULL){//caso n? haja mem?ria
 
-        printf("\nMeméria insuficiente!\n");
+        printf("\nMem?ria insuficiente!\n");
         exit(1); 
 
     }
 
-    //passando dados para os nós
+    //passando dados para os n?s
     strcpy(node -> name, nome);
     node -> enrollment = mat;
     node -> note = nota;
@@ -74,14 +74,14 @@ void insert_aluno(Lista *lista, int mat, char nome[], float nota, float frequenc
 
     
 
-    //atualizando posições
-    node -> next = lista -> begin;  //o nó começa a apontar para o que era o primeiro nó (begin)
-    lista -> begin = node;          //e ele passa a ser o primeiro nó
+    //atualizando posi??es
+    node -> next = lista -> begin;  //o n? come?a a apontar para o que era o primeiro n? (begin)
+    lista -> begin = node;          //e ele passa a ser o primeiro n?
 
     if(lista -> begin == NULL){
 
-        //caso o inicio seja nulo n existem nós
-        //portanto esse novo nó passa a ser o fim
+        //caso o inicio seja nulo n existem n?s
+        //portanto esse novo n? passa a ser o fim
         lista -> end = node;        
 
     }
@@ -94,28 +94,28 @@ void remove_aluno(Lista *lista, int mat){
 
     //lista n criada
     if(lista == NULL){
-         printf("\nLista nó criada.\n");
+         printf("\nLista n? criada.\n");
          return;
     }
-    //n há nós
+    //n h? n?s
     if(lista -> begin == NULL){
-        printf("\nnó hé alunos.\n");
+        printf("\nn? h? alunos.\n");
         return;
     }
 
 
-    //criando dois nós auxiliares, 
+    //criando dois n?s auxiliares, 
     node_aluno *before, *after;
-    //(um vai ser o nó anterior, e o outro o próximo)
+    //(um vai ser o n? anterior, e o outro o pr?ximo)
 
-    //este for esta em função do after (ate ele chegar no fim)
+    //este for esta em fun??o do after (ate ele chegar no fim)
     for(after = lista -> begin; after != NULL; before = after, after = after -> next ){
-    //a cada laço, ambos os nós (after e before) avançam
+    //a cada la?o, ambos os n?s (after e before) avan?am
 
-        //achando a matrícula
+        //achando a matr?cula
         if(after -> enrollment == mat){
 
-            //caso só tenha UM nó
+            //caso s? tenha UM n?
             if(lista -> begin == lista -> end){
 
                 lista -> begin = NULL;
@@ -124,29 +124,29 @@ void remove_aluno(Lista *lista, int mat){
             }else{
             //caso n
 
-                //se for o primeiro nó
+                //se for o primeiro n?
                 if(lista -> begin = after){
 
                     lista -> begin = after -> next;
-                    //o inicio pega o próximo nó
+                    //o inicio pega o pr?ximo n?
 
                 }else if(lista -> end == after){
 
                     lista -> end = before;
                     before -> next = NULL;
-                    //o inicio pega o ultimo nó
+                    //o inicio pega o ultimo n?
 
                 }else{
 
-                    //o nó anterior passa a apontar para o nó da frente do next
+                    //o n? anterior passa a apontar para o n? da frente do next
                     before -> next = after -> next;
 
                 }
             }
-            //em todos os casos, isolamos o nó after
+            //em todos os casos, isolamos o n? after
 
             free(after);
-            //liberamos o nó isolado
+            //liberamos o n? isolado
 
             printf("\nAluno removido com sucesso.\n");
             return;
@@ -155,7 +155,7 @@ void remove_aluno(Lista *lista, int mat){
 
     }//fim do for
 
-    printf("\nAluno nó encontrado.\n");
+    printf("\nAluno n? encontrado.\n");
     return;
 
 }
@@ -164,14 +164,14 @@ void onDestroy(Lista *lista){
 
     //lista n criada
     if(lista == NULL) return;
-    //n há nós
+    //n h? n?s
     if(lista -> begin == NULL) return;
 
     node_aluno *node;
-    //se n houver meméria
+    //se n houver mem?ria
     if(node == NULL){
 
-        printf("\nMeméria insuficiente!\n");
+        printf("\nMem?ria insuficiente!\n");
         exit(1); 
 
     }
@@ -181,7 +181,7 @@ void onDestroy(Lista *lista){
         //aux assume o valor do inicio da lista
         node = lista -> begin;
 
-        //inicio da lista pega o préximo valor (um dps do aux)
+        //inicio da lista pega o pr?ximo valor (um dps do aux)
         lista -> begin = node -> next;
 
         //libera aux
@@ -192,24 +192,24 @@ void onDestroy(Lista *lista){
     free(lista);
 
 }
-//fim das funções do funcionamento da lista
+//fim das fun??es do funcionamento da lista
 
 
 
-//funções logicas
+//fun??es logicas
 
 int Check_Mat(Lista *lista, int mat){
 
     //lista n criada
     if(lista == NULL){
 
-        printf("\nLista nó criada!\n"); 
+        printf("\nLista n? criada!\n"); 
         return;
 
     }
-    //n há alunos
+    //n h? alunos
     if(lista -> begin == NULL){
-        printf("\nnó hé alunos.\n");
+        printf("\nn? h? alunos.\n");
         return;
     }
 
@@ -232,13 +232,13 @@ void print_name(Lista *lista, char nome[]){
 
     if(lista == NULL){
 
-        printf("\nLista nó criada!\n"); 
+        printf("\nLista n? criada!\n"); 
         return;
 
     }
-    //nó há alunos
+    //n? h? alunos
     if(lista -> begin == NULL){
-        printf("\nnó hé alunos.\n");
+        printf("\nn? h? alunos.\n");
         return;
     }
 
@@ -248,10 +248,10 @@ void print_name(Lista *lista, char nome[]){
 
         if(strcmp(nome, i -> name)==0){
 
-            printf("\nMatrécula: %d\n", i -> enrollment);
+            printf("\nMatr?cula: %d\n", i -> enrollment);
             printf("Nome: %s\n", i -> name);
             printf("Nota: %.2f\n", i -> note);
-            printf("Frequéncia: %.2f\n", i -> frequency);
+            printf("Frequ?ncia: %.2f\n", i -> frequency);
             printf("Turma: %c\n", i -> class);
             printf("\n");
             return;
@@ -260,7 +260,7 @@ void print_name(Lista *lista, char nome[]){
 
     }
     
-    printf("\nAluno nó encontrado!\n");
+    printf("\nAluno n? encontrado!\n");
     return;
 
 }
@@ -269,13 +269,13 @@ void print_mat(Lista *lista, int mat){
 
     if(lista == NULL){
 
-        printf("\nLista nó criada!\n"); 
+        printf("\nLista n? criada!\n"); 
         return;
 
     }
-    //n há alunos
+    //n h? alunos
     if(lista -> begin == NULL){
-        printf("\nnó hé alunos.\n");
+        printf("\nn? h? alunos.\n");
         return;
     }
 
@@ -286,10 +286,10 @@ void print_mat(Lista *lista, int mat){
 
         if(i -> enrollment == mat){
 
-            printf("\nMatrécula: %d\n", i -> enrollment);
+            printf("\nMatr?cula: %d\n", i -> enrollment);
             printf("Nome: %s\n", i -> name);
             printf("Nota: %.2f\n", i -> note);
-            printf("Frequéncia: %.2f\n", i -> frequency);
+            printf("Frequ?ncia: %.2f\n", i -> frequency);
             printf("Turma: %c\n", i -> class);
             printf("\n");
             return;
@@ -298,7 +298,7 @@ void print_mat(Lista *lista, int mat){
 
     }
     
-    printf("\nAluno nó encontrado!\n");
+    printf("\nAluno n? encontrado!\n");
     return;
 
 }
@@ -307,12 +307,12 @@ void Name_Sort(Lista *lista){
 
     //lista n criada
     if(lista == NULL){
-         printf("\nLista nó criada.\n");
+         printf("\nLista n? criada.\n");
          return;
     }
-    //n há alunos
+    //n h? alunos
     if(lista -> begin == NULL){
-        printf("\nnó hé alunos.\n");
+        printf("\nn? h? alunos.\n");
         return;
     }
 
@@ -364,16 +364,17 @@ void Name_Sort(Lista *lista){
 
 }
 
-lista_print(Lista *lista){
+//fun test
+void lista_print(Lista *lista){
 
     //lista n criada
     if(lista == NULL){
-         printf("\nLista nó criada.\n");
+         printf("\nLista n? criada.\n");
          return;
     }
-    //nó há alunos
+    //n? h? alunos
     if(lista -> begin == NULL){
-        printf("\nnó hé alunos.\n");
+        printf("\nn? h? alunos.\n");
         return;
     }
 
@@ -386,13 +387,17 @@ lista_print(Lista *lista){
 
 }
 
-//fim das funções légicas
+void recordAluno(Lista *lista){
+
+    
+}
+//fim das fun??es l?gicas
 
 int main()
 {
     setlocale(LC_ALL, "portuguese");
     int o=0;
-    char nome[50], name[50], turma;
+    char nome[50], name[50], turma, g;
     int mat,m;
     float frequencia, nota;
     node_aluno *aux;
@@ -404,17 +409,17 @@ int main()
     do
     {
         
-        printf("Escolha uma opééo:\n\n");
-        printf("1. Cadastrar aluno no inócio da lista;\n");
+        printf("Escolha uma op??o:\n\n");
+        printf("1. Cadastrar aluno no in?cio da lista;\n");
         printf("2. Remover aluno;\n");
         printf("3. Pesquisar aluno pelo nome;\n");
-        printf("4. Pesquisar aluno por matrécula;\n");
+        printf("4. Pesquisar aluno por matr?cula;\n");
         printf("5. Mostrar todos os alunos de uma turma;\n");
         printf("6. Ordenar toda a lista de alunos por nome;\n");
         printf("7. Mostrar os alunos com a maior e menor nota;\n");
         printf("8. Gravar no arquivo;\n");
         printf("9. Sair.\n");
-        printf("\nDigite sua opééo:");
+        printf("\nDigite sua op??o:");
         scanf("%d",&o);
         printf("\n");
         
@@ -429,15 +434,15 @@ int main()
             printf("1 . Cadastrar aluno:\n\n");
 
 
-            printf("Digite a matrécula do(a) aluno(a): ");
+            printf("Digite a matr?cula do(a) aluno(a): ");
             scanf("%d",&mat);
             while(mat>99999||mat<0){
-                printf("Matrécula invélida, séo aceitos nómeros entre 0 e 99999\nInsira uma matrécula vélida: ");
+                printf("Matr?cula inv?lida, s?o aceitos n?meros entre 0 e 99999\nInsira uma matr?cula v?lida: ");
                 scanf("%d",&mat);
             }
-            //checagem de matrécula
+            //checagem de matr?cula
             while(Check_Mat(lista,mat)==1){
-                printf("Matrécula jé cadastrada!\nInsira outro nómero de matrécula:");
+                printf("Matr?cula j? cadastrada!\nInsira outro n?mero de matr?cula:");
                 scanf("%d",&mat);
             }
                     
@@ -450,16 +455,16 @@ int main()
             printf("Digite a nota do(a) aluno(a): ");
             scanf("%f",&nota);
             while(nota>10.0||nota<0.0){
-                printf("Nota invélida, séo aceitos nómeros entre 0,0 e 10,0\nInsira uma nota vélida: ");
+                printf("Nota inv?lida, s?o aceitos n?meros entre 0,0 e 10,0\nInsira uma nota v?lida: ");
                 scanf("%f",&nota);
             }
 
 
 
-            printf("Digite a frequéncia do(a) aluno(a): ");
+            printf("Digite a frequ?ncia do(a) aluno(a): ");
             scanf("%f",&frequencia);
             while(frequencia>100.0||frequencia<0.0){
-                printf("Frequéncia invélida, séo aceitos nómeros entre 0,0 e 100,0\nInsira uma frequéncia vélida: ");
+                printf("Frequ?ncia inv?lida, s?o aceitos n?meros entre 0,0 e 100,0\nInsira uma frequ?ncia v?lida: ");
                 scanf("%f",&frequencia);
             }
             setbuf(stdin,NULL);
@@ -470,13 +475,21 @@ int main()
             scanf("%c",&turma);
             setbuf(stdin,NULL);
             while(turma!='A'&&turma!='B'){
-                printf("Turma invélida, séo aceitos os caracteres 'A' e 'B'\nInsira uma turma vélida: ");
+                printf("Turma inv?lida, s?o aceitos os caracteres 'A' e 'B'\nInsira uma turma v?lida: ");
                 scanf("%c",&turma);
                 setbuf(stdin,NULL);
             }
 
             //inserindo dados na lista
             insert_aluno(lista,mat,nome,nota,frequencia,turma);
+
+            printf("Deseja salvar o aluno?\n");
+            scanf("%c", &g);
+
+            if(g == 'S' || g == 's'){
+                printf("salvano");
+                /* recordAluno(lista); */
+            }
 
             system("pause");
             system("cls");
@@ -491,7 +504,7 @@ int main()
 
             printf("2 . Remover Aluno:\n\n");
 
-            printf("Digite o nómero de matrécula do aluno que seré removido: ");
+            printf("Digite o n?mero de matr?cula do aluno que ser? removido: ");
             scanf("%d",&m);
         
             //apos ler a mat removemos ela
@@ -510,7 +523,7 @@ int main()
 
             printf("3 . Pesquisar aluno pelo nome:\n\n");
 
-            printf("Digite o nome do aluno que seré pesquisado: ");
+            printf("Digite o nome do aluno que ser? pesquisado: ");
             setbuf(stdin,NULL);
             gets(name);
 
@@ -528,9 +541,9 @@ int main()
             system("pause");
             system("cls");
 
-            printf("4 . Pesquisar aluno pela matrécula:\n\n");
+            printf("4 . Pesquisar aluno pela matr?cula:\n\n");
 
-            printf("Digite a matrécula do aluno que seré pesquisado: ");
+            printf("Digite a matr?cula do aluno que ser? pesquisado: ");
             scanf("%d", &mat);
 
             //apos ler a mat printamos ela
@@ -554,14 +567,14 @@ int main()
             scanf("%c",&turma);
             setbuf(stdin,NULL);
             while(turma!='A'&&turma!='B'){
-                printf("Turma invélida, séo aceitos os caracteres 'A' e 'B'\nInsira uma turma vélida: ");
+                printf("Turma inv?lida, s?o aceitos os caracteres 'A' e 'B'\nInsira uma turma v?lida: ");
                 scanf("%c",&turma);
                 setbuf(stdin,NULL);
             }
 
             printf("\n");
 
-            //apos escolher uma turma um laço de repetição percorre toda a lista
+            //apos escolher uma turma um la?o de repeti??o percorre toda a lista
             //caso tenha os alunos dessa turma suas infos sao printadas
             for(aux = lista -> begin; aux != NULL; aux = aux -> next){
 
@@ -574,10 +587,10 @@ int main()
 
             }
 
-            //caso o contador for 0, não há alunos daquela turma
+            //caso o contador for 0, n?o h? alunos daquela turma
             if(cont==0){
 
-                printf("nó existem alunos nessa turma!\n");
+                printf("n? existem alunos nessa turma!\n");
 
             }
 
@@ -604,9 +617,9 @@ int main()
             for(node_aluno *i = lista -> begin; i != NULL ; i = i -> next){
 
                 printf("%d. Nome: %s\n", cont, i -> name);
-                printf("    Matrécula: %d\n", i -> enrollment);
+                printf("    Matr?cula: %d\n", i -> enrollment);
                 printf("    Nota: %.2f\n", i -> note);
-                printf("    Frequéncia: %.2f%\n", i -> frequency);
+                printf("    Frequ?ncia: %.2f%\n", i -> frequency);
                 printf("    Turma: %c\n\n", i -> class);
 
                 cont++;
@@ -674,7 +687,7 @@ int main()
 
         case 9:
         
-            printf("Vocé saiu do programa...\n");
+            printf("Voc? saiu do programa...\n");
             onDestroy(lista);//liberamos a lista
 
             break;
@@ -683,8 +696,8 @@ int main()
 
         default:
             
-            //caso a entrada n for válida
-            printf("Insira uma opééo vélida!\n");
+            //caso a entrada n for v?lida
+            printf("Insira uma op??o v?lida!\n");
 
             break;
         }
