@@ -697,7 +697,33 @@ int main()
         
         case 8:
         
+            system("pause");
+            system("cls");
+
+            printf("8 . Gravar no arquivo;\n\n");
+
+            FILE *fp = fopen(".//data//database.bin", "a+b");
             
+            if(fp==NULL){
+                printf("\nErro ao abrir o arquivo!\n");
+            }
+
+            for(node_aluno *i = lista -> begin ; i != NULL ; i = i -> next){
+
+                if( i -> onSave == 0){
+
+                    fwrite(i,sizeof(node_aluno), 1, fp);
+                    i -> onSave = 1;
+
+                    fclose(fp);
+                }
+
+            }
+            printf("Mudanças salvas!");
+
+            printf("\n");
+            system("pause");
+            system("cls");
             break;
 
         case 9:
