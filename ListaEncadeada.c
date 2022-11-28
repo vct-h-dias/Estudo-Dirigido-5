@@ -17,6 +17,12 @@ typedef struct _node{//node representando dados do aluno
     //ponteiro para o pr?ximo n?
     struct _node *next;
 
+    //boolean para verificações da gravação
+    int onSave;
+    //0 -> não gravado
+    //1 -> gravado
+    //-1 ->removido
+
 }node_aluno;
 
 typedef struct{//representa??o da lista
@@ -86,6 +92,9 @@ void insert_aluno(Lista *lista, int mat, char nome[], float nota, float frequenc
 
     }
 
+    //verificação de gravação
+    node -> onSave = 0;
+
     printf("\nAluno cadastrado com sucesso!\n");
 
 }
@@ -145,6 +154,8 @@ void remove_aluno(Lista *lista, int mat){
             }
             //em todos os casos, isolamos o n? after
 
+
+            /*atualizar nó no arquivo after -> onSave = -1*/
             free(after);
             //liberamos o n? isolado
 
@@ -386,12 +397,13 @@ void lista_print(Lista *lista){
 void recordAluno(Lista *lista){
 
     /* printf("aluno recorder"); */
-    FILE *fp = fopen(".//data//database.txt", "a+");
+    FILE *fp = fopen(".//data//database.bin", "a+b");
     if(fp==NULL){
         printf("\nErro ao abrir o arquivo!\n");
     }
 
-    fwrite(&lista->begin,sizeof(node_aluno), 1, fp);
+    fwrite(lista->begin,sizeof(node_aluno), 1, fp);
+    lista -> begin -> onSave = 1;
 
     fclose(fp);
 }
