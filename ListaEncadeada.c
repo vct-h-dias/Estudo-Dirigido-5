@@ -389,7 +389,7 @@ void lista_print(Lista *lista){
 
 void recordAluno(Lista *lista){
 
-    
+    FILE *fp = fopen(".//data//database.txt", "a+");
 }
 //fim das fun??es l?gicas
 
