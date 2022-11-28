@@ -412,7 +412,8 @@ int main()
         printf("5. Mostrar todos os alunos de uma turma;\n");
         printf("6. Ordenar toda a lista de alunos por nome;\n");
         printf("7. Mostrar os alunos com a maior e menor nota;\n");
-        printf("8. Sair.\n");
+        printf("8. Gravar no arquivo;\n");
+        printf("9. Sair.\n");
         printf("\nDigite sua opééo:");
         scanf("%d",&o);
         printf("\n");
@@ -668,10 +669,17 @@ int main()
         
         case 8:
         
+            
+            break;
+
+        case 9:
+        
             printf("Vocé saiu do programa...\n");
             onDestroy(lista);//liberamos a lista
 
             break;
+
+
 
         default:
             
