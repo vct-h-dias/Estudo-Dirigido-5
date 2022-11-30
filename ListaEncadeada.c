@@ -56,6 +56,22 @@ Lista* onCreate(){//cria lista
 
 }
 
+void reloadList(Lista *lista, FILE *fp){
+
+    fp = fopen(".//data//database.bin", "rb");
+    int position;
+    while(1){
+        node_aluno *node = (node_aluno*) malloc(sizeof(node_aluno));
+        fread(node , sizeof(node_aluno), 1, fp);
+        if(feof(fp)){
+            break;
+        }
+        if(node -> onSave != -1){
+            insert_aluno(lista, node -> enrollment, node -> name, node -> note, node -> frequency, node -> class);
+        }
+    }    
+}
+
 void insert_aluno(Lista *lista, int mat, char nome[], float nota, float frequencia, char turma){
 
     //lista n? criada
@@ -394,10 +410,10 @@ void lista_print(Lista *lista){
 
 }
 
-void recordAluno(Lista *lista){
+void recordAluno(Lista *lista, FILE *fp){
 
     /* printf("aluno recorder"); */
-    FILE *fp = fopen(".//data//database.bin", "a+b");
+    fp = fopen(".//data//database.bin", "r+b");
     if(fp==NULL){
         printf("\nErro ao abrir o arquivo!\n");
     }
@@ -421,6 +437,10 @@ int main()
     int big = -0.01, little = 10.01;
     
     Lista *lista = onCreate(); //criando lista
+    FILE *fp = fopen(".//data//database.bin", "rb");
+    if(fp!=NULL){
+        reloadList(lista, fp);
+    }
 
     do
     {
@@ -509,7 +529,7 @@ int main()
             }
 
             if(g == 'S' || g == 's'){
-                recordAluno(lista); 
+                recordAluno(lista, fp); 
             }
 
             system("pause");
@@ -708,7 +728,7 @@ int main()
 
             printf("8 . Gravar no arquivo;\n\n");
 
-            FILE *fp = fopen(".//data//database.bin", "a+b");
+            fp = fopen(".//data//database.bin", "a+b");
             
             if(fp==NULL){
                 printf("\nErro ao abrir o arquivo!\n");
