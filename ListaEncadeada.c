@@ -56,24 +56,14 @@ Lista* onCreate(){//cria lista
 
 }
 
-void reloadList(Lista *lista, FILE *fp){
-
-    fp = fopen(".//data//database.bin", "rb");
-    int position;
-    while(1){
-        node_aluno *node = (node_aluno*) malloc(sizeof(node_aluno));
-        fread(node , sizeof(node_aluno), 1, fp);
-        if(feof(fp)){
-            break;
-        }
-        if(node -> onSave != -1){
-            insert_aluno(lista, node -> enrollment, node -> name, node -> note, node -> frequency, node -> class);
-        }
-    }    
-}
 
 void insert_aluno(Lista *lista, int mat, char nome[], float nota, float frequencia, char turma){
 
+    /* printf("%d\n", mat);
+    printf("%s\n", nome);
+    printf("%f\n", nota);
+    printf("%f\n", frequencia);
+    printf("%c\n", turma); */
     //lista n? criada
     if(lista == NULL) return;
 
@@ -109,13 +99,34 @@ void insert_aluno(Lista *lista, int mat, char nome[], float nota, float frequenc
     }
 
     //verifica��o de grava��o
-    node -> onSave = 0;
+    
 
-    printf("\nAluno cadastrado com sucesso!\n");
+    
 
 }
 
-void remove_aluno(Lista *lista, int mat){
+void reloadList(Lista *lista, FILE *fp){
+
+    int position;
+    while(1){
+        node_aluno *node = (node_aluno*) malloc(sizeof(node_aluno));
+        fread(node , sizeof(node_aluno), 1, fp);
+        if(feof(fp)){
+            break;
+        }
+        if(node -> onSave != -1){
+            printf("%d", node -> onSave);
+            int mat = node -> enrollment;
+            float nota = node -> note, freq = node -> frequency;
+            char nome[50], turma = node -> class;
+            strcpy(nome, node -> name);
+
+            insert_aluno(lista, mat, nome, nota, freq, turma);
+        }
+    }    
+}
+
+void remove_aluno(Lista *lista, int mat, FILE *fp){
 
     //lista n criada
     if(lista == NULL){
@@ -130,13 +141,13 @@ void remove_aluno(Lista *lista, int mat){
 
 
     //criando dois n?s auxiliares, 
-    node_aluno *before, *after;
+    node_aluno *before;
     //(um vai ser o n? anterior, e o outro o pr?ximo)
 
     //este for esta em fun??o do after (ate ele chegar no fim)
-    for(after = lista -> begin; after != NULL; before = after, after = after -> next ){
+    for(node_aluno *after = lista -> begin; after != NULL; before = after, after = after -> next ){
     //a cada la?o, ambos os n?s (after e before) avan?am
-
+        printf("%d", after -> onSave);
         //achando a matr?cula
         if(after -> enrollment == mat){
 
@@ -169,8 +180,30 @@ void remove_aluno(Lista *lista, int mat){
                 }
             }
             //em todos os casos, isolamos o n? after
+            printf("%d", after -> onSave);
+            if(after -> onSave == 1){
+                fp = fopen(".//data//database.bin", "r+b");
+                int i; 
+                while(1){
+                    
+                    node_aluno *node = (node_aluno*) malloc(sizeof(node_aluno));
+                    i = ftell(fp);
 
+                    fread(node, sizeof(node_aluno), 1, fp);
 
+                    if(feof(fp)){
+                        break;
+                    }
+                    if(node -> enrollment == after -> enrollment){
+                        node -> onSave = -1;
+                        printf("%d", node -> onSave);
+                        fseek(fp, i, SEEK_SET); 
+                        fwrite(node,sizeof(node_aluno), 1, fp);
+                        break;
+                    }
+                }
+                fclose(fp);
+            }
             /*atualizar n� no arquivo after -> onSave = -1*/
             free(after);
             //liberamos o n? isolado
@@ -410,16 +443,36 @@ void lista_print(Lista *lista){
 
 }
 
-void recordAluno(Lista *lista, FILE *fp){
+void recordAluno(node_aluno *aluno, FILE *fp){
 
     /* printf("aluno recorder"); */
     fp = fopen(".//data//database.bin", "r+b");
     if(fp==NULL){
         printf("\nErro ao abrir o arquivo!\n");
+        return;
     }
+    
+    int i; 
+    while(1){
 
-    lista -> begin -> onSave = 1;
-    fwrite(lista->begin,sizeof(node_aluno), 1, fp);
+        node_aluno *node = (node_aluno*) malloc(sizeof(node_aluno));
+        i = ftell(fp);
+
+        fread(node, sizeof(node_aluno), 1, fp);
+
+        if(node -> onSave == -1){
+            fseek(fp, i, SEEK_SET); 
+            aluno -> onSave = 1;
+            fwrite(aluno,sizeof(node_aluno), 1, fp);
+            break;
+        }
+
+        if(feof(fp)){
+            aluno -> onSave = 1;
+            fwrite(aluno,sizeof(node_aluno), 1, fp);
+            break;
+        }
+    }
 
     fclose(fp);
 }
@@ -440,7 +493,10 @@ int main()
     FILE *fp = fopen(".//data//database.bin", "rb");
     if(fp!=NULL){
         reloadList(lista, fp);
+    }else{
+        fp = fopen(".//data//database.bin", "wb");
     }
+    fclose(fp);
 
     do
     {
@@ -518,6 +574,7 @@ int main()
 
             //inserindo dados na lista
             insert_aluno(lista,mat,nome,nota,frequencia,turma);
+            printf("\nAluno cadastrado com sucesso!\n");
 
             printf("Deseja salvar o aluno?\n");
             scanf("%c", &g);
@@ -529,7 +586,9 @@ int main()
             }
 
             if(g == 'S' || g == 's'){
-                recordAluno(lista, fp); 
+                recordAluno(lista -> begin, fp); 
+            }else{
+                lista -> begin -> onSave = 0;
             }
 
             system("pause");
@@ -549,7 +608,7 @@ int main()
             scanf("%d",&m);
         
             //apos ler a mat removemos ela
-            remove_aluno(lista,m);
+            remove_aluno(lista, m, fp);
             
             system("pause");
             system("cls");
@@ -727,9 +786,9 @@ int main()
             system("cls");
 
             printf("8 . Gravar no arquivo;\n\n");
-
-            fp = fopen(".//data//database.bin", "a+b");
             
+            fp = fopen(".//data//database.bin", "rb");
+
             if(fp==NULL){
                 printf("\nErro ao abrir o arquivo!\n");
             }
@@ -738,10 +797,8 @@ int main()
 
                 if( i -> onSave == 0){
 
-                    fwrite(i,sizeof(node_aluno), 1, fp);
-                    i -> onSave = 1;
+                    recordAluno(i,fp);
 
-                    fclose(fp);
                 }
 
             }
