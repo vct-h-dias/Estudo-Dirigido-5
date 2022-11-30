@@ -17,9 +17,9 @@ typedef struct _node{//node representando dados do aluno
     //ponteiro para o pr?ximo n?
     struct _node *next;
 
-    //boolean para verificaÁıes da gravaÁ„o
+    //boolean para verificaÔøΩÔøΩes da gravaÔøΩÔøΩo
     int onSave;
-    //0 -> n„o gravado
+    //0 -> nÔøΩo gravado
     //1 -> gravado
     //-1 ->removido
 
@@ -92,7 +92,7 @@ void insert_aluno(Lista *lista, int mat, char nome[], float nota, float frequenc
 
     }
 
-    //verificaÁ„o de gravaÁ„o
+    //verificaÔøΩÔøΩo de gravaÔøΩÔøΩo
     node -> onSave = 0;
 
     printf("\nAluno cadastrado com sucesso!\n");
@@ -155,7 +155,7 @@ void remove_aluno(Lista *lista, int mat){
             //em todos os casos, isolamos o n? after
 
 
-            /*atualizar nÛ no arquivo after -> onSave = -1*/
+            /*atualizar nÔøΩ no arquivo after -> onSave = -1*/
             free(after);
             //liberamos o n? isolado
 
@@ -402,8 +402,8 @@ void recordAluno(Lista *lista){
         printf("\nErro ao abrir o arquivo!\n");
     }
 
-    fwrite(lista->begin,sizeof(node_aluno), 1, fp);
     lista -> begin -> onSave = 1;
+    fwrite(lista->begin,sizeof(node_aluno), 1, fp);
 
     fclose(fp);
 }
@@ -501,6 +501,12 @@ int main()
 
             printf("Deseja salvar o aluno?\n");
             scanf("%c", &g);
+            setbuf(stdin,NULL);
+            while(g!='S'&&g!='s'&&g!='N'&&g!='n'){
+                printf("Op√ß√£o inv√°lida s√£o aceitos apenas os caracteres 'S'/'s' ou 'N'/'n'\nInsira uma op√ß√£o v?lida: ");
+                scanf("%c",&g);
+                setbuf(stdin,NULL);
+            }
 
             if(g == 'S' || g == 's'){
                 recordAluno(lista); 
@@ -719,7 +725,7 @@ int main()
                 }
 
             }
-            printf("MudanÁas salvas!");
+            printf("MudanÔøΩas salvas!");
 
             printf("\n");
             system("pause");
