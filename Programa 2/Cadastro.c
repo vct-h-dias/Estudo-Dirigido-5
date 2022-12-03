@@ -276,6 +276,86 @@ int id_disponivel(Lista *lista){
     return cont;
 }
 
+void print_id(Lista *lista, int id){
+
+    if(lista == NULL){
+
+        printf("\nLista não criada!\n"); 
+        return;
+
+    }
+    //não há users
+    if(lista -> begin == NULL){
+        printf("\nNão há users\n");
+        return;
+    }
+
+
+    node_user *i;
+
+    for(i = lista -> begin; i != NULL; i = i -> next){
+
+        if(i -> id == id){
+
+            printf("\nID: %d\n", i -> id);
+            printf("Nome: %s", i -> name);
+            printf("Endereço:\n");
+            printf("\tRua: %s", i -> adress.street);
+            printf("\tBairro: %s", i -> adress.district);
+            printf("\tNúmero: %s", i -> adress.number);
+            printf("\tCEP: %s", i -> adress.CEP);
+            printf("Tipo: %c\n", i -> type);
+            printf("Usuário: %s", i -> user);
+            
+            printf("Senha: %s\n", i  -> password);
+
+            printf("\n");
+            return;
+
+        }
+
+    }
+    
+    printf("\nUser não encontrado!\n");
+    return;
+
+}
+
+
+void recordUser(node_user *user, FILE *fp){
+
+    /* printf("user recorder"); */
+    fp = fopen(".//data//database.bin", "r+b");
+    if(fp==NULL){
+        printf("\nErro ao abrir o arquivo!\n");
+        return;
+    }
+    
+    int i; 
+    while(1){
+
+        node_user *node = (node_user*) malloc(sizeof(node_user));
+        i = ftell(fp);
+
+        fread(node, sizeof(node_user), 1, fp);
+
+        if(node -> onSave == -1){
+            fseek(fp, i, SEEK_SET); 
+            user -> onSave = 1;
+            fwrite(user,sizeof(node_user), 1, fp);
+            break;
+        }
+
+        if(feof(fp)){
+            user -> onSave = 1;
+            fwrite(user,sizeof(node_user), 1, fp);
+            break;
+        }
+    }
+
+    fclose(fp);
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -289,6 +369,7 @@ int main()
     if(fp!=NULL){
         printf("Carregando database.bin...\n");
         reloadList(lista, fp);
+        print_id(lista, 0);
         printf("Carregada!\n");
     }else{
         printf("Criando database.bin...\n");
@@ -336,8 +417,49 @@ int main()
         fgets(node -> password, 257, stdin);
         /* node -> password = "A"; */
 
+        //salvar no arquivo
+        node -> onSave = 1;
+
         insert_user(lista, node);
+        print_id(lista, node -> id);
+
+        fp = fopen(".//data//database.bin", "wb");
+
+        recordUser(node, fp);
     }
     fclose(fp);
+
+    int startOption;
+
+    do
+    {
+        
+        printf("Escolha uma opção:\n\n");
+        printf("1. Login;\n");
+        printf("2. Sair;\n");
+        scanf("%d", &startOption);
+
+        switch (startOption)
+        {
+        case 1:
+
+            printf("login");
+            break;
+        
+        case 2:
+
+            printf("\nVocê saiu do programa...\n");
+            onDestroy(lista);//liberamos a lista
+            break;
+        
+        default:
+
+            printf("\nInsira uma opção válida.\n\n");
+            break;
+        }
+    
+
+    }while(startOption!= 2);
+
     return 0;
 }
