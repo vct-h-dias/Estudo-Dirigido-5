@@ -805,7 +805,8 @@ int main()
                 printf("\nErro ao abrir o arquivo!\n");
             }
 
-            for(node_aluno *i = lista -> begin ; i != NULL ; i = i -> next){
+            node_aluno *i = (node_aluno*) malloc(sizeof(node_aluno));
+            for(i = lista -> begin ; i != NULL ; i = i -> next){
 
                 if( i -> onSave == 0){
 
@@ -814,6 +815,7 @@ int main()
                 }
 
             }
+            fclose(fp);
             printf("Mudan�as salvas!");
 
             printf("\n");
@@ -840,7 +842,7 @@ int main()
 
 
 
-    } while(o!=8);
+    } while(o!=9);
     
     
 
