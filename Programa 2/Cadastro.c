@@ -492,7 +492,6 @@ int main()
         node->onSave = 1;
 
         insert_user(lista, node);
-        
 
         fp = fopen(".//data//database.bin", "wb");
 
@@ -540,185 +539,196 @@ int main()
                     {
                     case 'C':
 
-                        printf("1. Alterar senha;\n");
-                        printf("2. Sair;\n");
-                        scanf("%d", &C_option);
-                        fgets(senha, 64, stdin);
-
-                        printf("\n");
-                        system("pause");
-                        system("cls");
-
-                        switch (C_option)
+                        do
                         {
-                        case 1:
-
-                            printf("Insira sua nova senha: ");
-                            setbuf(stdin, NULL);
+                            printf("1. Alterar senha;\n");
+                            printf("2. Sair;\n");
+                            scanf("%d", &C_option);
                             fgets(senha, 64, stdin);
-                            setbuf(stdin, NULL);
-
-                            *i->password = senha;
-                            printf("\nSenha modificada com sucesso\n ");
 
                             printf("\n");
                             system("pause");
                             system("cls");
-                            break;
 
-                        case 2:
-
-                            printf("\nSalvando modificações\n\n");
-                            updateUser(lista, i);
-                            exit(1);
-                            break;
-
-                        default:
-
-                            printf("\nInsira uma opção válida!\n");
-                            break;
-
-                            break;
-                        }
-                    default:
-
-                        printf("1. Cadastrar Usuárioa;\n");
-                        printf("2. Remover Usuário;\n");
-                        printf("3. Pesquisar Usuário por nome;\n");
-                        printf("4. Alterar senha;\n");
-                        printf("5. Sair;\n");
-                        scanf("%d", &S_Adm_option);
-
-                        printf("\n");
-                        system("pause");
-                        system("cls");
-
-                        switch (S_Adm_option)
-                        {
-                        case 1:
-
-                            node_user *node = (node_user *)malloc(sizeof(node_user));
-
-                            // lendo id(definido automaticamente)
-                            node->id = id_disponivel(lista);
-                            printf("ID: %d\n", node->id);
-
-                            // lendo nome
-                            setbuf(stdin, NULL);
-                            printf("Insira seu nome: ");
-                            fgets(node->name, 64, stdin);
-
-                            // lendo endereço
-                            setbuf(stdin, NULL);
-                            printf("Insira seu endereço:\n");
-                            printf("\tRua: ");
-                            fgets(node->adress.street, 64, stdin);
-                            setbuf(stdin, NULL);
-                            printf("\tBairro: ");
-                            fgets(node->adress.district, 64, stdin);
-                            setbuf(stdin, NULL);
-                            printf("\tNúmero: ");
-                            fgets(node->adress.number, 16, stdin);
-                            setbuf(stdin, NULL);
-                            printf("\tCEP: ");
-                            fgets(node->adress.CEP, 32, stdin);
-                            setbuf(stdin, NULL);
-
-                            // lendo tipo (definido automaticamente)
-                            printf("Tipo: ");
-                            scanf("%c", &type);
-                            setbuf(stdin, NULL);
-                            while (type != 'A' && type != 'S' && type != 'C')
+                            switch (C_option)
                             {
-                                if(type == 'S'){
-                                    printf("Já existe um superusuário no sistema.\nInsira uma tipo válida: ");
-                                }else{
-                                    printf("Tipo inválida, são aceitos os caracteres 'S' ou 'C' ou 'A'\nInsira uma tipo válida: ");
-                                }
-                                scanf("%c", &type);
+                            case 1:
+
+                                printf("Insira sua nova senha: ");
                                 setbuf(stdin, NULL);
+                                fgets(senha, 64, stdin);
+                                setbuf(stdin, NULL);
+
+                                *i->password = senha;
+                                printf("\nSenha modificada com sucesso\n ");
+
+                                printf("\n");
+                                system("pause");
+                                system("cls");
+                                break;
+
+                            case 2:
+
+                                printf("\nSalvando modificações\n\n");
+                                updateUser(lista, i);
+                                exit(1);
+                                break;
+
+                            default:
+
+                                printf("\nInsira uma opção válida!\n");
+
+                                break;
                             }
 
-                            // lendo user
-                            setbuf(stdin, NULL);
-                            printf("Usuário: ");
-                            fgets(node->user, 64, stdin);
+                        } while (C_option != 2);
 
-                            // lendo senha
-                            setbuf(stdin, NULL);
-                            printf("Senha: ");
-                            fgets(node->password, 257, stdin);
-                            /* fazer */
+                    default:
 
-                            // salvar no arquivo
-                            node->onSave = 1;
-
-                            insert_user(lista, node);
-                            
-
-                            fp = fopen(".//data//database.bin", "wb");
-
-                            recordUser(node, fp);
-
-                            break;
-
-                        case 2:
-
-                            printf("2 . Remover user:\n\n");
-
-                            printf("Digite o número de ID do user que será removido: ");
-                            scanf("%d", &id);
-
-                            // apos ler a mat removemos ela
-                            remove_user(lista, id, fp);
-
-                            system("pause");
-                            system("cls");
-
-                            break;
-
-                        case 3:
-
-                            printf("3 . Pesquisar user pelo nome:\n\n");
-
-                            printf("Digite o nome do user que será pesquisado: ");
-                            setbuf(stdin, NULL);
-                            gets(name);
-                            setbuf(stdin, NULL);
-                            // apos ler o nome printamos ele
-                            print_name(lista, name);
-
-                            system("pause");
-                            system("cls");
-
-                            break;
-
-                        case 4:
-
-                            printf("4. Alterar senha:\n\n");
-
-                            printf("Insira sua nova senha: ");
-                            fgets(senha, 64, stdin);
-
-                            *i->password = senha;
-                            printf("\nSenha modificada com sucesso\n ");
+                        do
+                        {
+                            printf("1. Cadastrar Usuárioa;\n");
+                            printf("2. Remover Usuário;\n");
+                            printf("3. Pesquisar Usuário por nome;\n");
+                            printf("4. Alterar senha;\n");
+                            printf("5. Sair;\n");
+                            scanf("%d", &S_Adm_option);
 
                             printf("\n");
                             system("pause");
                             system("cls");
 
-                            break;
+                            switch (S_Adm_option)
+                            {
+                            case 1:
 
-                        case 5:
+                                node_user *node = (node_user *)malloc(sizeof(node_user));
 
-                            printf("\nVocê saiu do programa...\n");
-                            exit(1);
+                                // lendo id(definido automaticamente)
+                                node->id = id_disponivel(lista);
+                                printf("ID: %d\n", node->id);
 
-                            break;
+                                // lendo nome
+                                setbuf(stdin, NULL);
+                                printf("Insira seu nome: ");
+                                fgets(node->name, 64, stdin);
 
-                        default:
-                            break;
-                        }
+                                // lendo endereço
+                                setbuf(stdin, NULL);
+                                printf("Insira seu endereço:\n");
+                                printf("\tRua: ");
+                                fgets(node->adress.street, 64, stdin);
+                                setbuf(stdin, NULL);
+                                printf("\tBairro: ");
+                                fgets(node->adress.district, 64, stdin);
+                                setbuf(stdin, NULL);
+                                printf("\tNúmero: ");
+                                fgets(node->adress.number, 16, stdin);
+                                setbuf(stdin, NULL);
+                                printf("\tCEP: ");
+                                fgets(node->adress.CEP, 32, stdin);
+                                setbuf(stdin, NULL);
+
+                                // lendo tipo (definido automaticamente)
+                                printf("Tipo: ");
+                                scanf("%c", &type);
+                                setbuf(stdin, NULL);
+                                while (type != 'A' && type != 'S' && type != 'C')
+                                {
+                                    if (type == 'S')
+                                    {
+                                        printf("Já existe um superusuário no sistema.\nInsira uma tipo válida: ");
+                                    }
+                                    else
+                                    {
+                                        printf("Tipo inválida, são aceitos os caracteres 'S' ou 'C' ou 'A'\nInsira uma tipo válida: ");
+                                    }
+                                    scanf("%c", &type);
+                                    setbuf(stdin, NULL);
+                                }
+
+                                // lendo user
+                                setbuf(stdin, NULL);
+                                printf("Usuário: ");
+                                fgets(node->user, 64, stdin);
+
+                                // lendo senha
+                                setbuf(stdin, NULL);
+                                printf("Senha: ");
+                                fgets(node->password, 257, stdin);
+                                /* fazer */
+
+                                // salvar no arquivo
+                                node->onSave = 1;
+
+                                insert_user(lista, node);
+
+                                fp = fopen(".//data//database.bin", "wb");
+
+                                recordUser(node, fp);
+
+                                break;
+
+                            case 2:
+
+                                printf("2 . Remover user:\n\n");
+
+                                printf("Digite o número de ID do user que será removido: ");
+                                scanf("%d", &id);
+
+                                // apos ler a mat removemos ela
+                                remove_user(lista, id, fp);
+
+                                system("pause");
+                                system("cls");
+
+                                break;
+
+                            case 3:
+
+                                printf("3 . Pesquisar user pelo nome:\n\n");
+
+                                printf("Digite o nome do user que será pesquisado: ");
+                                setbuf(stdin, NULL);
+                                gets(name);
+                                setbuf(stdin, NULL);
+                                // apos ler o nome printamos ele
+                                print_name(lista, name);
+
+                                system("pause");
+                                system("cls");
+
+                                break;
+
+                            case 4:
+
+                                printf("4. Alterar senha:\n\n");
+
+                                printf("Insira sua nova senha: ");
+                                fgets(senha, 64, stdin);
+
+                                *i->password = senha;
+                                printf("\nSenha modificada com sucesso\n ");
+
+                                printf("\n");
+                                system("pause");
+                                system("cls");
+
+                                break;
+
+                            case 5:
+
+                                printf("\nVocê saiu do programa...\n");
+                                exit(1);
+
+                                break;
+
+                            default:
+
+                                printf("\nInsira uma opção válida!\n");
+                                break;
+                            }
+                        } while (S_Adm_option != 5);
 
                         break;
                     }
