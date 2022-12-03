@@ -530,7 +530,7 @@ int main()
             for (node_user *i = lista->begin; i != NULL; i = i->next)
             {
 
-                if (i->user == usuario && i->password == senha)
+                if (strcmp(i -> password, senha) == 0 && strcmp(i -> user, usuario) == 0 )
                 {
 
                     printf("Bem vindo! Escolha uma opção:\n\n");
@@ -559,7 +559,8 @@ int main()
                                 fgets(senha, 64, stdin);
                                 setbuf(stdin, NULL);
 
-                                *i->password = senha;
+                                strcpy(i -> password, senha);
+                                /* *i->password = senha; */
                                 printf("\nSenha modificada com sucesso\n ");
 
                                 printf("\n");
@@ -570,7 +571,7 @@ int main()
                             case 2:
 
                                 printf("\nSalvando modificações\n\n");
-                                updateUser(lista, i);
+                                /* updateUser(lista, i); */
                                 exit(1);
                                 break;
 
@@ -601,7 +602,8 @@ int main()
                             switch (S_Adm_option)
                             {
                             case 1:
-
+                            
+                                printf("\n");
                                 node_user *node = (node_user *)malloc(sizeof(node_user));
 
                                 // lendo id(definido automaticamente)
@@ -633,7 +635,7 @@ int main()
                                 printf("Tipo: ");
                                 scanf("%c", &type);
                                 setbuf(stdin, NULL);
-                                while (type != 'A' && type != 'S' && type != 'C')
+                                while (type != 'A' && type != 'C')
                                 {
                                     if (type == 'S')
                                     {
