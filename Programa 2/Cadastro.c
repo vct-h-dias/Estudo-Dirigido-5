@@ -356,6 +356,50 @@ void recordUser(node_user *user, FILE *fp){
     fclose(fp);
 }
 
+void print_name(Lista *lista, char nome[]){
+
+    if(lista == NULL){
+
+        printf("\nLista não criada!\n"); 
+        return;
+
+    }
+    //não há users
+    if(lista -> begin == NULL){
+        printf("\nNão há users\n");
+        return;
+    }
+
+    node_user *i;
+
+    for(i = lista -> begin; i != NULL; i = i -> next){
+
+        if(strcmp(nome, i -> name)==0){
+
+            printf("\nID: %d\n", i -> id);
+            printf("Nome: %s", i -> name);
+            printf("Endereço:\n");
+            printf("\tRua: %s", i -> adress.street);
+            printf("\tBairro: %s", i -> adress.district);
+            printf("\tNúmero: %s", i -> adress.number);
+            printf("\tCEP: %s", i -> adress.CEP);
+            printf("Tipo: %c\n", i -> type);
+            printf("Usuário: %s", i -> user);
+            
+            printf("Senha: %s\n", i  -> password);
+
+            printf("\n");
+            return;
+
+        }
+
+    }
+    
+    printf("\nUser não encontrado!\n");
+    return;
+
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -369,11 +413,10 @@ int main()
     if(fp!=NULL){
         printf("Carregando database.bin...\n");
         reloadList(lista, fp);
-        print_id(lista, 0);
         printf("Carregada!\n");
     }else{
         printf("Criando database.bin...\n");
-        /* fp = fopen(".//data//database.bin", "wb"); */
+        
         printf("Cadastre o Superusuário:\n\n");
         node_user *node = (node_user*) malloc(sizeof(node_user));
 
@@ -415,7 +458,7 @@ int main()
         setbuf(stdin, NULL);
         printf("Senha: ");
         fgets(node -> password, 257, stdin);
-        /* node -> password = "A"; */
+        /* fazer */
 
         //salvar no arquivo
         node -> onSave = 1;
@@ -429,7 +472,8 @@ int main()
     }
     fclose(fp);
 
-    int startOption;
+    int startOption, C_option, S_Adm_option, id;
+    char usuario[64], senha[64], name[64];
 
     do
     {
@@ -438,12 +482,170 @@ int main()
         printf("1. Login;\n");
         printf("2. Sair;\n");
         scanf("%d", &startOption);
+        printf("\n");
+        system("pause");
+        system("cls");
 
         switch (startOption)
         {
         case 1:
 
-            printf("login");
+            setbuf(stdin, NULL);
+            printf("Usuário: ");
+            fgets(usuario, 64, stdin);
+
+            setbuf(stdin, NULL);
+            printf("Senha: ");
+            fgets(senha, 64, stdin);
+            //fazer hash
+            setbuf(stdin, NULL);
+
+            
+            for(node_user *i = lista -> begin ; i != NULL ; i = i -> next){
+
+                if( i -> user == usuario && i -> password == senha){
+
+                    printf("Bem vindo! Escolha uma opção:\n\n");
+
+                    switch (i -> type)
+                    {
+                    case 'C':
+
+                        printf("1. Alterar senha;\n");
+                        printf("2. Sair;\n");
+                        scanf("%d", &C_option);
+                        fgets(senha, 64, stdin);
+
+                        printf("\n");
+                        system("pause");
+                        system("cls");
+
+                        switch (C_option)
+                        {
+                        case 1:
+                            
+                            printf("Insira sua nova senha: ");
+                            setbuf(stdin,NULL);
+                            fgets(senha, 64, stdin);
+                            setbuf(stdin,NULL);
+
+                            *i -> password = senha;
+                            printf("\nSenha modificada com sucesso\n ");
+
+
+                            printf("\n");
+                            system("pause");
+                            system("cls");
+                            break;
+                        
+                        case 2:
+
+                            printf("\nSalvando modificações\n\n");
+                            updateUser(lista, i);
+                            exit(1);
+                            break;
+                        
+
+                        default:
+
+                            printf("\nInsira uma opção válida!\n");
+                            break;
+
+                        break;
+                        }
+                    default:
+
+                        printf("1. Cadastrar Usuárioa;\n");
+                        printf("2. Remover Usuário;\n");
+                        printf("3. Pesquisar Usuário por nome;\n");
+                        printf("4. Alterar senha;\n");
+                        printf("5. Sair;\n");
+                        scanf("%d", &S_Adm_option);
+
+                        printf("\n");
+                        system("pause");
+                        system("cls");
+                        
+                        switch(S_Adm_option)
+                        {
+                        case 1:
+
+
+
+                            break;
+
+                        case 2:
+
+                            printf("2 . Remover user:\n\n");
+
+                            printf("Digite o número de ID do user que será removido: ");
+                            scanf("%d",&id);
+        
+                            //apos ler a mat removemos ela
+                            remove_user(lista, id, fp);
+            
+                            system("pause");
+                            system("cls");
+
+                            break;
+
+                        case 3:
+
+                            printf("3 . Pesquisar user pelo nome:\n\n");
+
+                            printf("Digite o nome do user que será pesquisado: ");
+                            setbuf(stdin,NULL);
+                            gets(name);
+                            setbuf(stdin,NULL);
+                            //apos ler o nome printamos ele
+                            print_name(lista,name);
+            
+                            system("pause");
+                            system("cls");
+
+                            break;
+
+                        case 4:
+
+                            printf("4. Alterar senha:\n\n");
+
+                            printf("Insira sua nova senha: ");
+                            fgets(senha, 64, stdin);
+
+                            *i -> password = senha;
+                            printf("\nSenha modificada com sucesso\n ");
+
+
+                            printf("\n");
+                            system("pause");
+                            system("cls");
+
+                            break;
+
+                        case 5:
+
+                            printf("\nVocê saiu do programa...\n");
+                            exit(1);
+
+                            break;
+
+                        default:
+                            break;
+                        }
+
+                        break;
+                    }
+
+                }
+
+            }
+
+            printf("\nUsuário ou Senha incorreta...");
+            printf("\n");
+            system("pause");
+            system("cls");
+
+
             break;
         
         case 2:
@@ -460,6 +662,7 @@ int main()
     
 
     }while(startOption!= 2);
+
 
     return 0;
 }
