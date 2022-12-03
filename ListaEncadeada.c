@@ -161,7 +161,7 @@ void remove_aluno(Lista *lista, int mat, FILE *fp){
             //caso n
 
                 //se for o primeiro n?
-                if(lista -> begin = after){
+                if(lista -> begin == after){
 
                     lista -> begin = after -> next;
                     //o inicio pega o pr?ximo n?
