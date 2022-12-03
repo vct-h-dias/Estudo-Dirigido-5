@@ -10,7 +10,7 @@ typedef struct{
     char street[64];
     char district[64];
     char number[16];
-    char CEP[16];
+    char CEP[32];
 
 }Adress;
 
@@ -21,8 +21,8 @@ typedef struct _node{//node representando dados do user
     char name[64];
     Adress adress;
     char type;
-    char user;
-    char password;
+    char user[64];
+    char password[257];//sha256 + 1
 
     //ponteiro para o proximo node
     struct _node *next;
@@ -257,6 +257,28 @@ void onDestroy(Lista *lista){
 /*-------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 
+/*--------------------------------------------------------------Funções "lógicas"------------------------------------------------------------------*/
+
+int id_disponivel(Lista *lista){
+
+    int cont=0, loop = 1;
+
+    while(loop){
+        loop = 0;
+        for(node_user *i = lista -> begin; i != NULL; i = i -> next ){
+            if(i -> id == cont){
+                cont++;
+                loop = 1;
+            }
+        }
+    }
+
+    return cont;
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
 /*-------------------------------------------------------------------Main---------------------------------------------------------------------------*/
 
 
@@ -265,13 +287,56 @@ int main()
     Lista *lista = onCreate(); //criando lista
     FILE *fp = fopen(".//data//database.bin", "rb");
     if(fp!=NULL){
-        printf("Carregando database.bin...\n\n");
+        printf("Carregando database.bin...\n");
         reloadList(lista, fp);
         printf("Carregada!\n");
     }else{
-        printf("Criando database.bin...\n\n");
-        fp = fopen(".//data//database.bin", "wb");
-        printf("Criada!\n");
+        printf("Criando database.bin...\n");
+        /* fp = fopen(".//data//database.bin", "wb"); */
+        printf("Cadastre o Superusuário:\n\n");
+        node_user *node = (node_user*) malloc(sizeof(node_user));
+
+        //lendo id(definido automaticamente)
+        node -> id = id_disponivel(lista);
+        printf("ID: %d\n", node -> id);
+        
+        //lendo nome
+        setbuf(stdin, NULL);
+        printf("Insira seu nome: ");
+        fgets(node -> name, 64, stdin);
+
+        //lendo endereço
+        setbuf(stdin, NULL);
+        printf("Insira seu endereço:\n");
+        printf("\tRua: ");
+        fgets(node -> adress.street, 64, stdin);
+        setbuf(stdin, NULL);
+        printf("\tBairro: ");
+        fgets(node -> adress.district, 64, stdin);
+        setbuf(stdin, NULL);
+        printf("\tNúmero: ");
+        fgets(node -> adress.number, 16, stdin);
+        setbuf(stdin, NULL);
+        printf("\tCEP: ");
+        fgets(node -> adress.CEP, 32, stdin);
+        setbuf(stdin, NULL);
+
+        //lendo tipo (definido automaticamente)
+        printf("Tipo: S - Superusuário\n");
+        node -> type = 'S';
+        
+        //lendo user
+        setbuf(stdin, NULL);
+        printf("Usuário: ");
+        fgets(node -> user, 64, stdin);
+
+        //lendo senha
+        setbuf(stdin, NULL);
+        printf("Senha: ");
+        fgets(node -> password, 257, stdin);
+        /* node -> password = "A"; */
+
+        insert_user(lista, node);
     }
     fclose(fp);
     return 0;
