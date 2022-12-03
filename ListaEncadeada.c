@@ -57,7 +57,7 @@ Lista* onCreate(){//cria lista
 }
 
 
-void insert_aluno(Lista *lista, int mat, char nome[], float nota, float frequencia, char turma){
+void insert_aluno(Lista *lista, int mat, char nome[], float nota, float frequencia, char turma, int save){
 
     /* printf("%d\n", mat);
     printf("%s\n", nome);
@@ -83,7 +83,7 @@ void insert_aluno(Lista *lista, int mat, char nome[], float nota, float frequenc
     node -> note = nota;
     node -> frequency = frequencia;
     node -> class = turma;
-
+    node -> onSave = save;
     
 
     //atualizando posi??es
@@ -105,6 +105,33 @@ void insert_aluno(Lista *lista, int mat, char nome[], float nota, float frequenc
 
 }
 
+void lista_print(Lista *lista){
+
+    //lista n criada
+    if(lista == NULL){
+         printf("\nLista n? criada.\n");
+         return;
+    }
+    //n? h? alunos
+    if(lista -> begin == NULL){
+        printf("\nn? h? alunos.\n");
+        return;
+    }
+    int cont = 1;
+    for(node_aluno *i = lista -> begin; i != NULL; i = i-> next){
+
+        printf("%d. Nome: %s\n", cont, i -> name);
+                printf("    Matr?cula: %d\n", i -> enrollment);
+                printf("    Nota: %.2f\n", i -> note);
+                printf("    Frequ?ncia: %.2f%\n", i -> frequency);
+                printf("    Turma: %c\n", i -> class);
+                printf("    Salvo: %d\n\n", i -> onSave);
+        cont++;
+    }
+    return;
+
+}
+
 void reloadList(Lista *lista, FILE *fp){
 
     int position;
@@ -115,15 +142,15 @@ void reloadList(Lista *lista, FILE *fp){
             break;
         }
         if(node -> onSave != -1){
-            printf("%d", node -> onSave);
             int mat = node -> enrollment;
             float nota = node -> note, freq = node -> frequency;
             char nome[50], turma = node -> class;
+            int save = node -> onSave;
             strcpy(nome, node -> name);
 
-            insert_aluno(lista, mat, nome, nota, freq, turma);
+            insert_aluno(lista, mat, nome, nota, freq, turma, save);
         }
-    }    
+    }   
 }
 
 void remove_aluno(Lista *lista, int mat, FILE *fp){
@@ -147,7 +174,7 @@ void remove_aluno(Lista *lista, int mat, FILE *fp){
     //este for esta em fun??o do after (ate ele chegar no fim)
     for(node_aluno *after = lista -> begin; after != NULL; before = after, after = after -> next ){
     //a cada la?o, ambos os n?s (after e before) avan?am
-        printf("%d", after -> onSave);
+        
         //achando a matr?cula
         if(after -> enrollment == mat){
 
@@ -180,7 +207,9 @@ void remove_aluno(Lista *lista, int mat, FILE *fp){
                 }
             }
             //em todos os casos, isolamos o n? after
-            printf("%d", after -> onSave);
+            
+            printf("%d\n", after -> onSave);
+            /*APARENTEMENTe ta dando ruim o onSave, vou ver ,melhor onde colocar essas verificações*/
             if(after -> onSave == 1){
                 fp = fopen(".//data//database.bin", "r+b");
                 int i; 
@@ -309,6 +338,7 @@ void print_name(Lista *lista, char nome[]){
             printf("Nota: %.2f\n", i -> note);
             printf("Frequ?ncia: %.2f\n", i -> frequency);
             printf("Turma: %c\n", i -> class);
+            printf("Salvo: %d\n", i -> onSave);
             printf("\n");
             return;
 
@@ -347,6 +377,7 @@ void print_mat(Lista *lista, int mat){
             printf("Nota: %.2f\n", i -> note);
             printf("Frequ?ncia: %.2f\n", i -> frequency);
             printf("Turma: %c\n", i -> class);
+            printf("Salvo: %d\n", i -> onSave);
             printf("\n");
             return;
 
@@ -421,27 +452,7 @@ void Name_Sort(Lista *lista){
 }
 
 //fun test
-void lista_print(Lista *lista){
 
-    //lista n criada
-    if(lista == NULL){
-         printf("\nLista n? criada.\n");
-         return;
-    }
-    //n? h? alunos
-    if(lista -> begin == NULL){
-        printf("\nn? h? alunos.\n");
-        return;
-    }
-
-    for(node_aluno *i = lista -> begin; i != NULL; i = i-> next){
-
-        printf("%s\n", i -> name);
-
-    }
-    return;
-
-}
 
 void recordAluno(node_aluno *aluno, FILE *fp){
 
@@ -573,7 +584,7 @@ int main()
             }
 
             //inserindo dados na lista
-            insert_aluno(lista,mat,nome,nota,frequencia,turma);
+            insert_aluno(lista,mat,nome,nota,frequencia,turma, 0);
             printf("\nAluno cadastrado com sucesso!\n");
 
             printf("Deseja salvar o aluno?\n");
@@ -720,7 +731,8 @@ int main()
                 printf("    Matr?cula: %d\n", i -> enrollment);
                 printf("    Nota: %.2f\n", i -> note);
                 printf("    Frequ?ncia: %.2f%\n", i -> frequency);
-                printf("    Turma: %c\n\n", i -> class);
+                printf("    Turma: %c\n", i -> class);
+                printf("    Salvo: %d\n\n", i -> onSave);
 
                 cont++;
             }
