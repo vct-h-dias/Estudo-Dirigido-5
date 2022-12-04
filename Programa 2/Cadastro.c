@@ -430,6 +430,42 @@ void recordUser(node_user *user, FILE *fp)
     fclose(fp);
 }
 
+updateUser(node_user *user, FILE *fp){
+
+    fp = fopen(".//data//database.bin", "r+b");
+    if (fp == NULL)
+    {
+        printf("\nErro ao abrir o arquivo!\n");
+        return;
+    }
+
+    int i;
+    while (1)
+    {
+
+        node_user *node = (node_user *)malloc(sizeof(node_user));
+        i = ftell(fp);
+
+        fread(node, sizeof(node_user), 1, fp);
+
+        if (node->id == user->id)
+        {
+            fseek(fp, i, SEEK_SET);
+            user->onSave = 1;
+            fwrite(user, sizeof(node_user), 1, fp);
+            break;
+        }
+
+        if (feof(fp))
+        {
+            user->onSave = 1;
+            fwrite(user, sizeof(node_user), 1, fp);
+            break;
+        }
+    }
+
+}
+
 void print_name(Lista *lista, char nome[])
 {
 
@@ -546,6 +582,9 @@ int main()
         fp = fopen(".//data//database.bin", "wb");
 
         recordUser(node, fp);
+        printf("\n");
+        system("pause");
+        system("cls");
     }
     fclose(fp);
 
@@ -614,6 +653,9 @@ int main()
 
                                 strcpy(i->password, senha);
                                 /* *i->password = senha; */
+                                if(i->onSave == 1){
+                                    updateUser(i, fp);
+                                }
                                 printf("\nSenha modificada com sucesso\n ");
 
                                 printf("\n");
@@ -624,7 +666,6 @@ int main()
                             case 2:
 
                                 printf("\nSalvando modificações\n\n");
-                                /* updateUser(lista, i); */
                                 exit(1);
                                 break;
 
@@ -747,7 +788,7 @@ int main()
                                 }
                                 else
                                 {
-                                    printf("%s", lista->begin->name);
+                                    /* printf("%s", lista->begin->name); */
                                     lista->begin->onSave = 0;
                                 }
 
@@ -764,7 +805,7 @@ int main()
                                 scanf("%d", &id);
                                 if (id == i->id)
                                 {
-                                    printf("\nNão é possível remover o usuário que esta logado agora! (literalmente você)\n ");
+                                    printf("\nNão é possível remover o usuário que esta logado agora! (literalmente você)\n");
                                     system("pause");
                                     system("cls");
                                     break;
@@ -827,7 +868,7 @@ int main()
                                 setbuf(stdin, NULL);
 
                                 strcpy(i->password, senha);
-                                recordUser(i, fp);
+                                updateUser(i, fp);
                                 printf("\nSenha modificada com sucesso\n ");
 
                                 printf("\n");
