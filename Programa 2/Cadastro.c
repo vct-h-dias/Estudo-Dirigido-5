@@ -343,6 +343,28 @@ void print_id(Lista *lista, int id)
     return;
 }
 
+print_list(Lista *lista)
+{
+
+    for (node_user *i = lista->begin; i != NULL; i = i->next)
+    {
+        printf("\nID: %d\n", i->id);
+        printf("Nome: %s", i->name);
+        printf("Endereço:\n");
+        printf("\tRua: %s", i->adress.street);
+        printf("\tBairro: %s", i->adress.district);
+        printf("\tNúmero: %s", i->adress.number);
+        printf("\tCEP: %s", i->adress.CEP);
+        printf("Tipo: %c\n", i->type);
+        printf("Usuário: %s", i->user);
+
+        printf("Senha: %s\n", i->password);
+
+        printf("\n");
+        return;
+    }
+}
+
 void recordUser(node_user *user, FILE *fp)
 {
 
@@ -527,12 +549,15 @@ int main()
             // fazer hash
             setbuf(stdin, NULL);
 
+            // i como se fosse o "user atual"
             for (node_user *i = lista->begin; i != NULL; i = i->next)
             {
 
-                if (strcmp(i -> password, senha) == 0 && strcmp(i -> user, usuario) == 0 )
+                if (strcmp(i->password, senha) == 0 && strcmp(i->user, usuario) == 0)
                 {
 
+                    system("pause");
+                    system("cls");
                     printf("Bem vindo! Escolha uma opção:\n\n");
 
                     switch (i->type)
@@ -559,7 +584,7 @@ int main()
                                 fgets(senha, 64, stdin);
                                 setbuf(stdin, NULL);
 
-                                strcpy(i -> password, senha);
+                                strcpy(i->password, senha);
                                 /* *i->password = senha; */
                                 printf("\nSenha modificada com sucesso\n ");
 
@@ -575,6 +600,12 @@ int main()
                                 exit(1);
                                 break;
 
+                                /*debug*/
+                            case 21:
+
+                                print_list(lista);
+                                break;
+
                             default:
 
                                 printf("\nInsira uma opção válida!\n");
@@ -588,6 +619,7 @@ int main()
 
                         do
                         {
+
                             printf("1. Cadastrar Usuárioa;\n");
                             printf("2. Remover Usuário;\n");
                             printf("3. Pesquisar Usuário por nome;\n");
@@ -602,8 +634,8 @@ int main()
                             switch (S_Adm_option)
                             {
                             case 1:
-                            
-                                printf("\n");
+
+                                printf("1. Cadastrar Usuárioa;\n\n");
                                 node_user *node = (node_user *)malloc(sizeof(node_user));
 
                                 // lendo id(definido automaticamente)
@@ -669,6 +701,10 @@ int main()
 
                                 recordUser(node, fp);
 
+                                printf("\n\nUser salvo!\n");
+                                system("pause");
+                                system("cls");
+
                                 break;
 
                             case 2:
@@ -725,6 +761,12 @@ int main()
 
                                 break;
 
+                            /*debug*/
+                            case 21:
+
+                                print_list(lista);
+                                break;
+
                             default:
 
                                 printf("\nInsira uma opção válida!\n");
@@ -748,6 +790,12 @@ int main()
 
             printf("\nVocê saiu do programa...\n");
             onDestroy(lista); // liberamos a lista
+            break;
+
+        /*debug*/
+        case 21:
+
+            print_list(lista);
             break;
 
         default:
