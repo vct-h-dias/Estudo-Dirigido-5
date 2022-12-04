@@ -302,7 +302,7 @@ int id_disponivel(Lista *lista)
     return cont;
 }
 
-int Check_Mat(Lista *lista, int nome)
+int Check_Name(Lista *lista, char nome[])
 {
 
     // lista n criada
@@ -316,10 +316,10 @@ int Check_Mat(Lista *lista, int nome)
     node_user *i;
     for (i = lista->begin; i != NULL; i = i->next)
     {
-
-        if (i->name == nome)
+        /*debug*/
+        /* printf("\nEntrou\n"); */
+        if (strcmp(nome, i->user)==0)
         {
-
             return 1;
         }
     }
@@ -719,11 +719,6 @@ int main()
                                 setbuf(stdin, NULL);
                                 printf("Insira seu nome: ");
                                 fgets(user->name, 64, stdin);
-                                while (Check_Mat(lista, user->name) == 1)
-                                {
-                                    printf("Usuário já cadastrada!\nInsira outro noem de usuário:");
-                                    fgets(user->name, 64, stdin);
-                                }
 
                                 // lendo endereço
                                 setbuf(stdin, NULL);
@@ -768,6 +763,11 @@ int main()
                                 setbuf(stdin, NULL);
                                 printf("Usuário: ");
                                 fgets(user->user, 64, stdin);
+                                while (Check_Name(lista, user->user) == 1)
+                                {
+                                    printf("Usuário já cadastrada!\nInsira outro noem de usuário:");
+                                    fgets(user->user, 64, stdin);
+                                }
 
                                 // lendo senha
                                 setbuf(stdin, NULL);
