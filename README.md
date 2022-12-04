@@ -42,5 +42,7 @@
 
     Ou seja execute o main.c 😊
 
+    (*OBS: talvez o código esteja mal formatado, se sim, perdão problema do git*)
+
     Muito obrigado por todos os ensinamentos por todo o ano, se divirtam corrigindo.
     Att...
