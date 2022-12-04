@@ -7,7 +7,6 @@
 
 typedef struct
 {
-
     char street[64];
     char district[64];
     char number[16];
@@ -33,7 +32,7 @@ typedef struct _node
     int onSave;
     // 0 -> não gravado
     // 1 -> gravado
-    //-1 ->removido
+    //-1 -> removido
 
 } node_user;
 
@@ -83,9 +82,18 @@ void insert_user(Lista *lista, node_user *User)
         printf("\nMemória insuficiente!\n");
         exit(1);
     }
-
     // passando dados para os nós
-    node = User;
+    node->id = User->id;
+    strcpy(node->name, User->name);
+
+    strcpy(node->adress.street, User->adress.street);
+    strcpy(node->adress.district, User->adress.district);
+    strcpy(node->adress.number, User->adress.number);
+    strcpy(node->adress.CEP, User->adress.CEP);
+
+    node->type = User->type;
+    strcpy(node->user, User->user);
+    strcpy(node->password, User->password);
     /*O ERRO TA NESSA POR%RA*/
 
     // atualizando posições
@@ -346,7 +354,8 @@ void print_id(Lista *lista, int id)
 print_list(Lista *lista)
 {
 
-    for (node_user *i = lista->begin; i != NULL; i = i->next)
+    node_user *i = (node_user *)malloc(sizeof(node_user));
+    for (i = lista->begin; i != NULL; i = i->next)
     {
         printf("\nID: %d\n", i->id);
         printf("Nome: %s", i->name);
@@ -361,8 +370,8 @@ print_list(Lista *lista)
         printf("Senha: %s\n", i->password);
 
         printf("\n");
-        return;
     }
+    return;
 }
 
 void recordUser(node_user *user, FILE *fp)
@@ -558,7 +567,7 @@ int main()
 
                     system("pause");
                     system("cls");
-                    printf("Bem vindo! Escolha uma opção:\n\n");
+                    printf("Bem vindo %s! (Tipo: %c) Escolha uma opção:\n\n", i -> name, i -> type);
 
                     switch (i->type)
                     {
@@ -636,31 +645,31 @@ int main()
                             case 1:
 
                                 printf("1. Cadastrar Usuárioa;\n\n");
-                                node_user *node = (node_user *)malloc(sizeof(node_user));
+                                node_user *user = (node_user *)malloc(sizeof(node_user));
 
                                 // lendo id(definido automaticamente)
-                                node->id = id_disponivel(lista);
-                                printf("ID: %d\n", node->id);
+                                user->id = id_disponivel(lista);
+                                printf("ID: %d\n", user->id);
 
                                 // lendo nome
                                 setbuf(stdin, NULL);
                                 printf("Insira seu nome: ");
-                                fgets(node->name, 64, stdin);
+                                fgets(user->name, 64, stdin);
 
                                 // lendo endereço
                                 setbuf(stdin, NULL);
                                 printf("Insira seu endereço:\n");
                                 printf("\tRua: ");
-                                fgets(node->adress.street, 64, stdin);
+                                fgets(user->adress.street, 64, stdin);
                                 setbuf(stdin, NULL);
                                 printf("\tBairro: ");
-                                fgets(node->adress.district, 64, stdin);
+                                fgets(user->adress.district, 64, stdin);
                                 setbuf(stdin, NULL);
                                 printf("\tNúmero: ");
-                                fgets(node->adress.number, 16, stdin);
+                                fgets(user->adress.number, 16, stdin);
                                 setbuf(stdin, NULL);
                                 printf("\tCEP: ");
-                                fgets(node->adress.CEP, 32, stdin);
+                                fgets(user->adress.CEP, 32, stdin);
                                 setbuf(stdin, NULL);
 
                                 // lendo tipo (definido automaticamente)
@@ -684,24 +693,39 @@ int main()
                                 // lendo user
                                 setbuf(stdin, NULL);
                                 printf("Usuário: ");
-                                fgets(node->user, 64, stdin);
+                                fgets(user->user, 64, stdin);
 
                                 // lendo senha
                                 setbuf(stdin, NULL);
                                 printf("Senha: ");
-                                fgets(node->password, 257, stdin);
+                                fgets(user->password, 257, stdin);
                                 /* fazer */
 
-                                // salvar no arquivo
-                                node->onSave = 1;
+                                insert_user(lista, user);
 
-                                insert_user(lista, node);
+                                printf("\n%s", i->user);
+                                printf("%s", lista->begin->user);
 
-                                fp = fopen(".//data//database.bin", "wb");
+                                char g;
+                                printf("Deseja salvar o user?\n");
+                                scanf("%c", &g);
+                                setbuf(stdin, NULL);
+                                while (g != 'S' && g != 's' && g != 'N' && g != 'n')
+                                {
+                                    printf("Opção inválida são aceitos apenas os caracteres 'S'/'s' ou 'N'/'n'\nInsira uma Opção válida: ");
+                                    scanf("%c", &g);
+                                    setbuf(stdin, NULL);
+                                }
 
-                                recordUser(node, fp);
+                                if (g == 'S' || g == 's')
+                                {
+                                    recordUser(lista->begin, fp);
+                                }
+                                else
+                                {
+                                    lista->begin->onSave = 0;
+                                }
 
-                                printf("\n\nUser salvo!\n");
                                 system("pause");
                                 system("cls");
 
