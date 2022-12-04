@@ -118,7 +118,7 @@ void reloadList(Lista *lista, FILE *fp)
             break;
         }
 
-        printf("\n%d", node -> onSave);
+        printf("\n%d", node->onSave);
         if (node->onSave != -1)
         {
             /* printf("\n%d", node -> onSave); */
@@ -299,6 +299,30 @@ int id_disponivel(Lista *lista)
     return cont;
 }
 
+int Check_Mat(Lista *lista, int nome)
+{
+
+    // lista n criada
+    if (lista == NULL)
+    {
+
+        printf("\nLista n�o criada!\n");
+        return;
+    }
+
+    node_user *i;
+    for (i = lista->begin; i != NULL; i = i->next)
+    {
+
+        if (i->name == nome)
+        {
+
+            return 1;
+        }
+    }
+    return 0;
+}
+
 void print_id(Lista *lista, int id)
 {
 
@@ -334,7 +358,7 @@ void print_id(Lista *lista, int id)
             printf("Usuário: %s", i->user);
 
             printf("Senha: %s", i->password);
-            printf("Salvo: %d\n", i -> onSave);
+            printf("Salvo: %d\n", i->onSave);
 
             printf("\n");
         }
@@ -361,7 +385,7 @@ print_list(Lista *lista)
         printf("Usuário: %s", i->user);
 
         printf("Senha: %s", i->password);
-        printf("Salvo: %d\n", i -> onSave);
+        printf("Salvo: %d\n", i->onSave);
 
         printf("\n");
     }
@@ -371,7 +395,6 @@ print_list(Lista *lista)
 void recordUser(node_user *user, FILE *fp)
 {
 
-    
     fp = fopen(".//data//database.bin", "r+b");
     if (fp == NULL)
     {
@@ -383,15 +406,15 @@ void recordUser(node_user *user, FILE *fp)
     while (1)
     {
 
-        node_user *node = (node_user*) malloc(sizeof(node_user));
+        node_user *node = (node_user *)malloc(sizeof(node_user));
         i = ftell(fp);
 
         fread(node, sizeof(node_user), 1, fp);
 
-        if (node -> onSave == -1)
+        if (node->onSave == -1)
         {
             fseek(fp, i, SEEK_SET);
-            user -> onSave = 1;
+            user->onSave = 1;
             fwrite(user, sizeof(node_user), 1, fp);
             break;
         }
@@ -427,7 +450,7 @@ void print_name(Lista *lista, char nome[])
 
     for (i = lista->begin; i != NULL; i = i->next)
     {
-        
+
         if (strcmp(nome, i->name) == 0)
         {
 
@@ -442,7 +465,7 @@ void print_name(Lista *lista, char nome[])
             printf("Usuário: %s", i->user);
 
             printf("Senha: %s", i->password);
-            printf("Salvo: %d\n", i -> onSave);
+            printf("Salvo: %d\n", i->onSave);
 
             printf("\n");
             return;
@@ -563,7 +586,7 @@ int main()
 
                     system("pause");
                     system("cls");
-                    printf("Bem vindo %s(Tipo: %c) Escolha uma opção:\n\n", i -> name, i -> type);
+                    printf("Bem vindo %s(Tipo: %c) Escolha uma opção:\n\n", i->name, i->type);
 
                     switch (i->type)
                     {
@@ -651,6 +674,11 @@ int main()
                                 setbuf(stdin, NULL);
                                 printf("Insira seu nome: ");
                                 fgets(user->name, 64, stdin);
+                                while (Check_Mat(lista, user->name) == 1)
+                                {
+                                    printf("Usuário já cadastrada!\nInsira outro noem de usuário:");
+                                    fgets(user->name, 64, stdin);
+                                }
 
                                 // lendo endereço
                                 setbuf(stdin, NULL);
@@ -719,7 +747,7 @@ int main()
                                 }
                                 else
                                 {
-                                    printf("%s", lista -> begin -> name);
+                                    printf("%s", lista->begin->name);
                                     lista->begin->onSave = 0;
                                 }
 
@@ -734,6 +762,36 @@ int main()
 
                                 printf("Digite o número de ID do user que será removido: ");
                                 scanf("%d", &id);
+                                if (id == i->id)
+                                {
+                                    printf("\nNão é possível remover o usuário que esta logado agora! (literalmente você)\n ");
+                                    system("pause");
+                                    system("cls");
+                                    break;
+                                }
+
+                                for (node_user *j = lista->begin; j != NULL; j = j->next)
+                                {
+
+                                    if (j->id == id)
+                                    {
+                                        if (j->type == 'S')
+                                        {
+                                            printf("\nNão é possível remover o superusuário\n ");
+                                            system("pause");
+                                            system("cls");
+                                            break;
+                                        }
+
+                                        if (i->type == 'A' && j->type != 'C')
+                                        {
+                                            printf("\nComo Administrador só é possivel remover Clientes!\n ");
+                                            system("pause");
+                                            system("cls");
+                                            break;
+                                        }
+                                    }
+                                }
 
                                 // apos ler a mat removemos ela
                                 remove_user(lista, id, fp);
@@ -768,8 +826,8 @@ int main()
                                 fgets(senha, 64, stdin);
                                 setbuf(stdin, NULL);
 
-                                strcpy(i -> password, senha);
-                                recordUser(i,fp);
+                                strcpy(i->password, senha);
+                                recordUser(i, fp);
                                 printf("\nSenha modificada com sucesso\n ");
 
                                 printf("\n");
