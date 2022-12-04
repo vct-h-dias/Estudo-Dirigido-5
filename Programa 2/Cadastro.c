@@ -3,6 +3,9 @@
 #include <string.h>
 #include <locale.h>
 
+//incluindo implementação do hash
+#include "../Hash/SHA256.c"
+
 /*---------------------------------------------------------Estruturas das listas----------------------------------------------------------------*/
 
 typedef struct
@@ -357,7 +360,7 @@ void print_id(Lista *lista, int id)
             printf("Tipo: %c\n", i->type);
             printf("Usuário: %s", i->user);
 
-            printf("Senha: %s", i->password);
+            printf("Senha: %s\n", i->password);
             printf("Salvo: %d\n", i->onSave);
 
             printf("\n");
@@ -384,7 +387,7 @@ print_list(Lista *lista)
         printf("Tipo: %c\n", i->type);
         printf("Usuário: %s", i->user);
 
-        printf("Senha: %s", i->password);
+        printf("Senha: %s\n", i->password);
         printf("Salvo: %d\n", i->onSave);
 
         printf("\n");
@@ -495,7 +498,7 @@ void print_name(Lista *lista, char nome[])
             printf("Tipo: %c\n", i->type);
             printf("Usuário: %s", i->user);
 
-            printf("Senha: %s", i->password);
+            printf("Senha: %s\n", i->password);
             printf("Salvo: %d\n", i->onSave);
 
             printf("\n");
@@ -566,6 +569,8 @@ int main()
         setbuf(stdin, NULL);
         printf("Senha: ");
         fgets(node->password, 257, stdin);
+
+        strcpy(node->password, SHA256(node -> password));
         /* fazer */
 
         // salvar no arquivo
@@ -584,7 +589,7 @@ int main()
     fclose(fp);
 
     int startOption, C_option, S_Adm_option, id;
-    char usuario[64], senha[64], name[64], type;
+    char usuario[64], senha[257], name[64], type;
 
     do
     {
@@ -607,14 +612,16 @@ int main()
 
             setbuf(stdin, NULL);
             printf("Senha: ");
-            fgets(senha, 64, stdin);
-            // fazer hash
+            fgets(senha, 257, stdin);
+
+            strcpy(senha, SHA256(senha));
+            
+            /* printf("\n%s\n", senha); */
             setbuf(stdin, NULL);
 
             // i como se fosse o "user atual"
             for (node_user *i = lista->begin; i != NULL; i = i->next)
             {
-
                 if (strcmp(i->password, senha) == 0 && strcmp(i->user, usuario) == 0)
                 {
 
@@ -646,8 +653,9 @@ int main()
                                 fgets(senha, 64, stdin);
                                 setbuf(stdin, NULL);
 
+                                strcpy(senha, SHA256(senha));
                                 strcpy(i->password, senha);
-                                /* *i->password = senha; */
+                                
                                 if(i->onSave == 1){
                                     updateUser(i, fp);
                                 }
@@ -765,7 +773,7 @@ int main()
                                 setbuf(stdin, NULL);
                                 printf("Senha: ");
                                 fgets(user->password, 257, stdin);
-                                /* fazer */
+                                strcpy(user->password, SHA256(user->password));
 
                                 insert_user(lista, user);
 
@@ -871,6 +879,7 @@ int main()
                                 fgets(senha, 64, stdin);
                                 setbuf(stdin, NULL);
 
+                                strcpy(senha, SHA256(senha));
                                 strcpy(i->password, senha);
                                 if(i->onSave == 1){
                                     updateUser(i, fp);
@@ -892,10 +901,10 @@ int main()
                                 break;
 
                             /*debug*/
-                            /* case 21:
+                            case 21:
 
                                 print_list(lista);
-                                break; */
+                                break; 
 
                             default:
 
@@ -923,10 +932,10 @@ int main()
             break;
 
         /*debug*/
-        /* case 21:
+        case 21:
 
             print_list(lista);
-            break; */
+            break; 
 
         default:
 
