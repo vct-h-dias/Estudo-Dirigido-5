@@ -253,7 +253,7 @@ void onDestroy(Lista *lista)
     if (node == NULL)
     {
 
-        printf("\nMem?ria insuficiente!\n");
+        printf("\nMemória insuficiente!\n");
         exit(1);
     }
 
@@ -306,7 +306,7 @@ int Check_Mat(Lista *lista, int nome)
     if (lista == NULL)
     {
 
-        printf("\nLista n�o criada!\n");
+        printf("\nLista não criada!\n");
         return;
     }
 
@@ -661,14 +661,15 @@ int main()
                             case 2:
 
                                 printf("\nSalvando modificações\n\n");
+                                onDestroy(lista);
                                 exit(1);
                                 break;
 
-                                /*debug*/
-                            case 21:
+                            /*debug*/
+                            /* case 21:
 
                                 print_list(lista);
-                                break;
+                                break; */
 
                             default:
 
@@ -884,16 +885,17 @@ int main()
 
                             case 5:
 
-                                printf("\nVocê saiu do programa...\n");
+                                printf("Você saiu do programa...\n");
+                                onDestroy(lista); 
                                 exit(1);
 
                                 break;
 
                             /*debug*/
-                            case 21:
+                            /* case 21:
 
                                 print_list(lista);
-                                break;
+                                break; */
 
                             default:
 
@@ -921,10 +923,10 @@ int main()
             break;
 
         /*debug*/
-        case 21:
+        /* case 21:
 
             print_list(lista);
-            break;
+            break; */
 
         default:
 
