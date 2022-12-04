@@ -83,17 +83,7 @@ void insert_user(Lista *lista, node_user *User)
         exit(1);
     }
     // passando dados para os nós
-    node->id = User->id;
-    strcpy(node->name, User->name);
-
-    strcpy(node->adress.street, User->adress.street);
-    strcpy(node->adress.district, User->adress.district);
-    strcpy(node->adress.number, User->adress.number);
-    strcpy(node->adress.CEP, User->adress.CEP);
-
-    node->type = User->type;
-    strcpy(node->user, User->user);
-    strcpy(node->password, User->password);
+    node = User;
     /*O ERRO TA NESSA POR%RA*/
 
     // atualizando posições
@@ -128,8 +118,10 @@ void reloadList(Lista *lista, FILE *fp)
             break;
         }
 
+        printf("\n%d", node -> onSave);
         if (node->onSave != -1)
         {
+            /* printf("\n%d", node -> onSave); */
             // se onSave não for -1 significa que o node não foi removido
 
             // passamos td ao insert
@@ -202,6 +194,7 @@ void remove_user(Lista *lista, int id, FILE *fp)
             // em todos os casos, isolamos o node after
 
             // verificando se o node estava no arquivo
+            /* printf("\n%d\n", after -> onSave); */
             if (after->onSave == 1)
             {
                 fp = fopen(".//data//database.bin", "r+b");
@@ -326,7 +319,7 @@ void print_id(Lista *lista, int id)
 
     for (i = lista->begin; i != NULL; i = i->next)
     {
-
+        printf("\nID: %d\n", i->id);
         if (i->id == id)
         {
 
@@ -340,10 +333,10 @@ void print_id(Lista *lista, int id)
             printf("Tipo: %c\n", i->type);
             printf("Usuário: %s", i->user);
 
-            printf("Senha: %s\n", i->password);
+            printf("Senha: %s", i->password);
+            printf("Salvo: %d\n", i -> onSave);
 
             printf("\n");
-            return;
         }
     }
 
@@ -354,7 +347,7 @@ void print_id(Lista *lista, int id)
 print_list(Lista *lista)
 {
 
-    node_user *i = (node_user *)malloc(sizeof(node_user));
+    node_user *i;
     for (i = lista->begin; i != NULL; i = i->next)
     {
         printf("\nID: %d\n", i->id);
@@ -367,7 +360,8 @@ print_list(Lista *lista)
         printf("Tipo: %c\n", i->type);
         printf("Usuário: %s", i->user);
 
-        printf("Senha: %s\n", i->password);
+        printf("Senha: %s", i->password);
+        printf("Salvo: %d\n", i -> onSave);
 
         printf("\n");
     }
@@ -377,7 +371,7 @@ print_list(Lista *lista)
 void recordUser(node_user *user, FILE *fp)
 {
 
-    /* printf("user recorder"); */
+    
     fp = fopen(".//data//database.bin", "r+b");
     if (fp == NULL)
     {
@@ -389,15 +383,15 @@ void recordUser(node_user *user, FILE *fp)
     while (1)
     {
 
-        node_user *node = (node_user *)malloc(sizeof(node_user));
+        node_user *node = (node_user*) malloc(sizeof(node_user));
         i = ftell(fp);
 
         fread(node, sizeof(node_user), 1, fp);
 
-        if (node->onSave == -1)
+        if (node -> onSave == -1)
         {
             fseek(fp, i, SEEK_SET);
-            user->onSave = 1;
+            user -> onSave = 1;
             fwrite(user, sizeof(node_user), 1, fp);
             break;
         }
@@ -433,7 +427,7 @@ void print_name(Lista *lista, char nome[])
 
     for (i = lista->begin; i != NULL; i = i->next)
     {
-
+        
         if (strcmp(nome, i->name) == 0)
         {
 
@@ -447,7 +441,8 @@ void print_name(Lista *lista, char nome[])
             printf("Tipo: %c\n", i->type);
             printf("Usuário: %s", i->user);
 
-            printf("Senha: %s\n", i->password);
+            printf("Senha: %s", i->password);
+            printf("Salvo: %d\n", i -> onSave);
 
             printf("\n");
             return;
@@ -520,9 +515,10 @@ int main()
         /* fazer */
 
         // salvar no arquivo
-        node->onSave = 1;
 
         insert_user(lista, node);
+
+        lista->begin->onSave = 1;
 
         fp = fopen(".//data//database.bin", "wb");
 
@@ -567,7 +563,7 @@ int main()
 
                     system("pause");
                     system("cls");
-                    printf("Bem vindo %s! (Tipo: %c) Escolha uma opção:\n\n", i -> name, i -> type);
+                    printf("Bem vindo %s(Tipo: %c) Escolha uma opção:\n\n", i -> name, i -> type);
 
                     switch (i->type)
                     {
@@ -703,8 +699,8 @@ int main()
 
                                 insert_user(lista, user);
 
-                                printf("\n%s", i->user);
-                                printf("%s", lista->begin->user);
+                                /* printf("\n%s", i->user);
+                                printf("%s", lista->begin->user);*/
 
                                 char g;
                                 printf("Deseja salvar o user?\n");
@@ -723,6 +719,7 @@ int main()
                                 }
                                 else
                                 {
+                                    printf("%s", lista -> begin -> name);
                                     lista->begin->onSave = 0;
                                 }
 
@@ -752,7 +749,7 @@ int main()
 
                                 printf("Digite o nome do user que será pesquisado: ");
                                 setbuf(stdin, NULL);
-                                gets(name);
+                                fgets(name, 64, stdin);
                                 setbuf(stdin, NULL);
                                 // apos ler o nome printamos ele
                                 print_name(lista, name);
@@ -767,9 +764,12 @@ int main()
                                 printf("4. Alterar senha:\n\n");
 
                                 printf("Insira sua nova senha: ");
+                                setbuf(stdin, NULL);
                                 fgets(senha, 64, stdin);
+                                setbuf(stdin, NULL);
 
-                                *i->password = senha;
+                                strcpy(i -> password, senha);
+                                recordUser(i,fp);
                                 printf("\nSenha modificada com sucesso\n ");
 
                                 printf("\n");

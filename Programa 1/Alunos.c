@@ -203,7 +203,7 @@ void remove_aluno(Lista *lista, int mat, FILE *fp){
                     if(node -> enrollment == after -> enrollment){
                         //basicmente percorremos o arquivo para subscrever o onSave deste node
                         node -> onSave = -1;
-                        printf("%d", node -> onSave);
+                        /* printf("%d", node -> onSave); */
                         fseek(fp, i, SEEK_SET); 
                         fwrite(node,sizeof(node_aluno), 1, fp);
                         break;
