@@ -7,14 +7,20 @@
 
 ## Program 1
 
-    The Program 1 is an a Academic Registration System of the students of the IFSP (Federal Institute of Education, Science and Technology of São Paulo)
-    In this program, you have the choice to save the student in a file, with this, it's possible to return the data that you have registred.
+    The Program 1 is an a Academic Registration System of the students of the IFSP
+    (Federal Institute of Education, Science and Technology of São Paulo)
+    
+    In this program, you have the choice to save the student in a file.
+    With this, it's possible to return the data that you have registred.
     All of this program was made with native C Language 
 
 ## Program 2
 
-    The Program 2, just like the Program 1, was made totally in native C Language, but, the hashing code ( Hash/SHA256 ) is from https://www.programmingalgorithms.com/algorithm/sha256/c/
-    This program also is a Registration System (like a Linux) and just like the Program 1, it's possible to save the users in a file and return the data that you have registred.
+    The Program 2, just like the Program 1, was made totally in native C Language.
+    But, the hashing code ( Hash/SHA256 ) is from https://www.programmingalgorithms.com/algorithm/sha256/c/
+    
+    This program also is a Registration System (like a Linux)
+    And just like the Program 1, it's possible to save the users in a file and return the data that you have registred.
 
 ### To: My profs :)
 
