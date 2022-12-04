@@ -118,7 +118,7 @@ void reloadList(Lista *lista, FILE *fp)
             break;
         }
 
-        printf("\n%d", node->onSave);
+        /* printf("\n%d", node->onSave); */
         if (node->onSave != -1)
         {
             /* printf("\n%d", node -> onSave); */
@@ -215,7 +215,7 @@ void remove_user(Lista *lista, int id, FILE *fp)
                     {
                         // basicmente percorremos o arquivo para subscrever o onSave deste node
                         node->onSave = -1;
-                        printf("%d", node->onSave);
+                        /* printf("%d", node->onSave); */
                         fseek(fp, i, SEEK_SET);
                         fwrite(node, sizeof(node_user), 1, fp);
                         break;
@@ -233,7 +233,7 @@ void remove_user(Lista *lista, int id, FILE *fp)
 
     } // fim do for
 
-    printf("\nuser n? encontrado.\n");
+    printf("\nUser não encontrado.\n");
     return;
 }
 
@@ -450,19 +450,14 @@ updateUser(node_user *user, FILE *fp){
 
         if (node->id == user->id)
         {
+            /* printf("\nDebug update: entrou\n"); */
             fseek(fp, i, SEEK_SET);
-            user->onSave = 1;
             fwrite(user, sizeof(node_user), 1, fp);
-            break;
-        }
-
-        if (feof(fp))
-        {
-            user->onSave = 1;
-            fwrite(user, sizeof(node_user), 1, fp);
-            break;
+            return;
         }
     }
+    /* printf("\nDebug update: não entrou\n"); */
+    return;
 
 }
 
@@ -739,11 +734,11 @@ int main()
 
                                 // lendo tipo (definido automaticamente)
                                 printf("Tipo: ");
-                                scanf("%c", &type);
+                                scanf("%c", &user->type);
                                 setbuf(stdin, NULL);
-                                while (type != 'A' && type != 'C')
+                                while (user->type != 'A' && user->type != 'C')
                                 {
-                                    if (type == 'S')
+                                    if (user->type == 'S')
                                     {
                                         printf("Já existe um superusuário no sistema.\nInsira uma tipo válida: ");
                                     }
@@ -751,10 +746,15 @@ int main()
                                     {
                                         printf("Tipo inválida, são aceitos os caracteres 'S' ou 'C' ou 'A'\nInsira uma tipo válida: ");
                                     }
-                                    scanf("%c", &type);
+                                    scanf("%c", &user->type);
                                     setbuf(stdin, NULL);
                                 }
 
+                                while(i -> type == 'A' && user -> type != 'C'){
+                                    printf("Como Administrador só é possivel remover Clientes!\nInsira um tipo válido: ");
+                                    scanf("%c", &user->type);
+                                    setbuf(stdin, NULL);
+                                }
                                 // lendo user
                                 setbuf(stdin, NULL);
                                 printf("Usuário: ");
@@ -811,6 +811,7 @@ int main()
                                     break;
                                 }
 
+                                int verif = 1;
                                 for (node_user *j = lista->begin; j != NULL; j = j->next)
                                 {
 
@@ -818,7 +819,8 @@ int main()
                                     {
                                         if (j->type == 'S')
                                         {
-                                            printf("\nNão é possível remover o superusuário\n ");
+                                            printf("\nNão é possível remover o superusuário\n");
+                                            verif = 0;
                                             system("pause");
                                             system("cls");
                                             break;
@@ -826,14 +828,15 @@ int main()
 
                                         if (i->type == 'A' && j->type != 'C')
                                         {
-                                            printf("\nComo Administrador só é possivel remover Clientes!\n ");
+                                            verif = 0;
+                                            printf("\nComo Administrador só é possivel remover Clientes!\n");
                                             system("pause");
                                             system("cls");
                                             break;
                                         }
                                     }
                                 }
-
+                                if(verif != 1) break;
                                 // apos ler a mat removemos ela
                                 remove_user(lista, id, fp);
 
@@ -868,7 +871,9 @@ int main()
                                 setbuf(stdin, NULL);
 
                                 strcpy(i->password, senha);
-                                updateUser(i, fp);
+                                if(i->onSave == 1){
+                                    updateUser(i, fp);
+                                }
                                 printf("\nSenha modificada com sucesso\n ");
 
                                 printf("\n");
