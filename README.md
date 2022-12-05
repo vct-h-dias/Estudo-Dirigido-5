@@ -30,8 +30,8 @@
     O repositório está dividido em três partes:
 
         Hash -> Código que peguei para o SHA256 (tem um codigo de exemplo que eu fiz caso ficasse confuso a função)
-        Programa 1 -> Arquiuvos do Programa 1
-        Programa 2 -> Arquiuvos do Programa 2
+        Programa 1 -> Arquivos do Programa 1
+        Programa 2 -> Arquivos do Programa 2
 
     Os main.c que (em cada pasta do Programa) é o que de fato executa o programa...
     Isso pois dividi a pasta de Programas dessa maneira para facilitar as coisas:

@@ -243,7 +243,7 @@ int main()
                                 }
 
                                 while(i -> type == 'A' && user -> type != 'C'){
-                                    printf("Como Administrador só é possivel remover Clientes!\nInsira um tipo válido: ");
+                                    printf("Como Administrador só é possivel cadastrar Clientes!\nInsira um tipo válido: ");
                                     scanf("%c", &user->type);
                                     setbuf(stdin, NULL);
                                 }
@@ -389,10 +389,10 @@ int main()
                                 break;
 
                             /*debug*/
-                            case 21:
+                            /* case 21:
 
                                 print_list(lista);
-                                break; 
+                                break;  */
 
                             default:
 
@@ -420,10 +420,10 @@ int main()
             break;
 
         /*debug*/
-        case 21:
+        /* case 21:
 
             print_list(lista);
-            break; 
+            break;  */
 
         default:
 
